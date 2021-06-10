@@ -1,0 +1,165 @@
+﻿@model List<SoftwareHouseManagement.Models.Entities.Task>
+
+<div class="row">
+    <div class="col-md-5">
+        <div class="panel panel-default mt-5" style="width:auto">
+            <div class="panel-heading">
+                Użytkownik
+            </div>
+
+            <div class="panel-body">
+                <form>
+                    <ol class="list-group list-group-numbered">
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="fw-bold"><b>Imię i nazwisko</b></div>
+                                Radosław Micał
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="font-weight-bold"><b>Email</b></div>
+                                micalradoslaw@gmail.com
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="font-weight-bold"><b>Przypisany komputer</b></div>
+                                Msi GL63
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="font-weight-bold"><b>Pozycja</b></div>
+                                Programista-Junior
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="font-weight-bold"><b>Stawka godzinowa</b></div>
+                                25.50 PLN
+                            </div>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                            <div class="ms-2 me-auto">
+                                <div class="font-weight-bold"><b>Godziny przepracowane w tym miesiącu</b></div>
+                                12:00 h
+                            </div>
+                        </li>
+                    </ol>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-7">
+        <div class="panel panel-default mt-5" style="width:auto">
+            <div class="panel-heading">
+                Obecne projekty
+            </div>
+
+            <div class="panel-body">
+                <form>
+                    <table class="table">
+                        <tr>
+                            <th>
+                                Temat projektu
+                            </th>
+                            <th>
+                                Przypisane godziny
+                            </th>
+                            <th>
+                                Przepracowane godziny
+                            </th>
+                        </tr>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                @*@Html.DisplayFor(modelItem => item.LastName)*@
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Subject)
+                                </td>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.AssignedHours.TotalHours):@Html.DisplayFor(modelItem => item.AssignedHours.Minutes)
+                                </td>
+                                <td class="text-center">
+                                    @Html.DisplayFor(modelItem => item.WorkedHours.TotalHours):@Html.DisplayFor(modelItem => item.WorkedHours.Minutes)
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="panel panel-default mt-5" style="width:auto">
+    <div class="panel-heading">
+        Twoje zespoły
+    </div>
+
+    <div class="panel-body">
+        <form>
+            <table class="table">
+                <tr>
+                    <th>
+                        Zespół
+                    </th>
+                    <th>
+                        Ilość członków
+                    </th>
+                    <th>
+                        Projekt
+                    </th>
+                    <th></th>
+                </tr>
+
+                <tr>
+                    @*@Html.DisplayFor(modelItem => item.LastName)*@
+                    <td>
+                        Team A
+                    </td>
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        Strona A
+                    </td>
+                    <td>
+                        @Html.ActionLink("Dostępy", "Index", new { id =1 })
+                    </td>
+                </tr>
+                <tr>
+                    @*@Html.DisplayFor(modelItem => item.LastName)*@
+                    <td>
+                        Team B
+                    </td>
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        Strona B
+                    </td>
+                    <td>
+                        @Html.ActionLink("Dostępy", "Index", new { id = 1 })
+                    </td>
+                </tr>
+                <tr>
+                    @*@Html.DisplayFor(modelItem => item.LastName)*@
+                    <td>
+                        Team C
+                    </td>
+                    <td>
+                        3
+                    </td>
+                    <td>
+                        Strona C
+                    </td>
+                    <td>
+                        @Html.ActionLink("Dostępy", "Index", new { id = 1 })
+                    </td>
+                </tr>
+
+            </table>
+        </form>
+    </div>
+</div>

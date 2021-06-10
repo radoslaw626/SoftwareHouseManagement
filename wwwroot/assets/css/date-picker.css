@@ -1,0 +1,17 @@
+﻿
+.main-sectiondp {
+    position: relative;
+    background: #00D3ED;
+    transform: translate(0%,80%);
+    padding: 60px 0px;
+    margin: auto;
+}
+
+.datepicker-section {
+    margin: auto;
+}
+
+.datepicker-section h1 {
+    color: #275760;
+    font-weight: bold;
+}
