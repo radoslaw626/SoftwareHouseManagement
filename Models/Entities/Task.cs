@@ -10,10 +10,12 @@ namespace SoftwareHouseManagement.Models.Entities
     {
         public long Id { get; set; }
         public string Subject { get; set; }
+        [DisplayFormat(DataFormatString = "{0:hh\\:mm}", ApplyFormatInEditMode = true)]
         public TimeSpan AssignedHours { get; set; }
+        [DisplayFormat(DataFormatString="{0:hh\\:mm}", ApplyFormatInEditMode = true)]
         public TimeSpan WorkedHours { get; set; }
 
-        public virtual Team Team { get; set; }
+        public virtual Team Team { get; set; } 
         public virtual Client Client { get; set; }
         public long ClientId { get; set; }
     }

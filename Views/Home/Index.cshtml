@@ -1,4 +1,6 @@
 ﻿@model List<SoftwareHouseManagement.Models.Entities.Task>
+@using SoftwareHouseManagement.Helpers
+@using SoftwareHouseManagement.Models.Entities
 
 <div class="row">
     <div class="col-md-5">
@@ -79,10 +81,16 @@
                                     @Html.DisplayFor(modelItem => item.Subject)
                                 </td>
                                 <td class="text-center">
-                                    @Html.DisplayFor(modelItem => item.AssignedHours.TotalHours):@Html.DisplayFor(modelItem => item.AssignedHours.Minutes)
+                                    @{
+                                        string time = string.Format($"{(int)item.AssignedHours.TotalHours}:{item.AssignedHours:mm}");
+                                    }
+                                    @Html.DisplayFor(modelItem => time)
                                 </td>
                                 <td class="text-center">
-                                    @Html.DisplayFor(modelItem => item.WorkedHours.TotalHours):@Html.DisplayFor(modelItem => item.WorkedHours.Minutes)
+                                    @{
+                                        string time2 = string.Format($"{(int)item.WorkedHours.TotalHours}:{item.WorkedHours:mm}");
+                                    }
+                                    @Html.DisplayFor(modelItem => time2)
                                 </td>
                             </tr>
                         }
@@ -125,7 +133,7 @@
                         Strona A
                     </td>
                     <td>
-                        @Html.ActionLink("Dostępy", "Index", new { id =1 })
+                        @Html.ActionLink("Dostępy", "Index", new { id = 1 })
                     </td>
                 </tr>
                 <tr>

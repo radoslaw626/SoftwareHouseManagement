@@ -69,8 +69,8 @@
                         <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Teams"><i class="fa fa-users"></i>Zespoły/zlecenia</a>
                     </li>
 
-                    <li class="@Html.IsSelected(actions: "Stanowiska", controllers: "Admin")">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Stanowiska"><i class="fa fa-edit"></i>Zarządzanie stanowiskami</a>
+                    <li class="@Html.IsSelected(actions: "Positions", controllers: "Positions")">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Positions" asp-action="Positions"><i class="fa fa-edit"></i>Zarządzanie stanowiskami</a>
                     </li>
                     <li class="@Html.IsSelected(actions: "AssignComputer", controllers: "Admin")">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AssignComputer"><i class="fa fa-desktop"></i> Zarządzanie komputerami</a>

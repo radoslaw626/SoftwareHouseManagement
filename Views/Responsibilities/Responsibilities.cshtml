@@ -1,0 +1,96 @@
+﻿@using System.Collections
+@using SoftwareHouseManagement.Models.Entities
+@model SoftwareHouseManagement.Models.Entities.Responsibilities
+
+<h2>@ViewBag.PositionName</h2>
+<br />
+<div class="panel panel-default mt-5" style="width:auto">
+    <div class="panel-heading">
+        Obowiązki
+    </div>
+    <div class="panel-body">
+        <form>
+            <table class="table">
+                <tr>
+                    <th>
+                        Obowiązek
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in (ViewBag.AssignedResponsibilities as IEnumerable<Responsibilities>))
+                {
+                    <tr>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @Html.ActionLink("Modyfikuj", "ResponsibilitiesModify", new { id = item.Id, positionId = ViewBag.PositionId }) |
+                            @Html.ActionLink("Usuń", "ResponsibilityDelete", new { responsibilityId = item.Id, positionId = ViewBag.PositionId })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </form>
+    </div>
+
+</div>
+
+<div class="panel panel-default mt-5" style="width:auto">
+    <div class="panel-heading">
+        Przypisz obowiązek do stanowiska
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("ResponsibilitiesAssign", "Responsibilities", FormMethod.Post, new { }))
+        {
+            <fieldset class="form-group">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="inputPassword3" class="col-form-label">Obowiązek</label>
+                    </div>
+                    <div class="col-sm-10">
+                        <select name="responsibilityID" class="form-control form-control-sm" aria-label="Default select example">
+                            <option selected>Wybierz obowiązek</option>
+                            @foreach (var item in (ViewBag.Responsibilities as IEnumerable<Responsibilities>))
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <input name="PositionId" value="@ViewBag.PositionId" type="hidden" />
+                    <button type="submit" class="btn btn-primary">Przypisz</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<div class="panel panel-default mt-5" style="width:auto">
+    <div class="panel-heading">
+        Dodaj nowy obowiązek
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("ResponsibilitiesCreateNew", "Responsibilities", FormMethod.Post, new { }))
+        {
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Obowiązek</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputEmail3" name="Name" placeholder="Nazwa obowiązku">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <input name="PositionId" value="@ViewBag.PositionId" type="hidden" />
+                    <button type="submit" class="btn btn-primary">Dodaj</button>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>

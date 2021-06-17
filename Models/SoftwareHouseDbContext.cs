@@ -14,10 +14,12 @@ namespace SoftwareHouseManagement.Models
         public DbSet<Worker> Workers { get; set; }
         public DbSet<Computer> Computers { get; set; }
         public DbSet<Team> Teams { get; set; }
+        public DbSet<Responsibilities> Responsibilities { get; set; }
+        public DbSet<Position> Positions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
         }
-    }
+}
 }

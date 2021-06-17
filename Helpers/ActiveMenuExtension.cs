@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SoftwareHouseManagement.Helpers
 {
@@ -37,6 +38,11 @@ namespace SoftwareHouseManagement.Helpers
             return Regex.Replace(str, "[a-z][A-Z]", m => m.Value[0] + " " + char.ToLower(m.Value[1]));
         }
 
+        public static string TimeStampConverter(this TimeSpan ts)
+        {
+            return string.Format($"{(int)ts.TotalHours}:{ts:mm}");
+        }
+
         public static IHtmlContent BuildBreadcrumbNavigation(this IHtmlHelper helper)
         {
             if //(helper.ViewContext.RouteData.Values["controller"].ToString() == "Home" ||
@@ -65,7 +71,7 @@ namespace SoftwareHouseManagement.Helpers
             }
 
             return breadcrumb.AppendHtml("</ol>");
-
+            
         }
     }
 }

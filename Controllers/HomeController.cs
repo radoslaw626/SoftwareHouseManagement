@@ -28,30 +28,24 @@ namespace SoftwareHouseManagement.Controllers
                     Id = 1,
                     AssignedHours = new TimeSpan(0,50,0,0),
                     WorkedHours = new TimeSpan(0,12,0,0),
-                    Client = new Client(),
                     ClientId = 1,
                     Subject = "Strona A",
-                    Team = new Team()
                 },
                 new Task()
                 {
                     Id = 2,
                     AssignedHours = new TimeSpan(0,80,0,0),
                     WorkedHours = new TimeSpan(0,12,0,0),
-                    Client = new Client(),
                     ClientId = 1,
-                    Subject = "Strona B",
-                    Team = new Team()
+                    Subject = "Strona B"
                 },
                 new Task()
                 {
                     Id = 3,
                     AssignedHours = new TimeSpan(0,60,0,0),
                     WorkedHours = new TimeSpan(0,12,0,0),
-                    Client = new Client(),
                     ClientId = 1,
                     Subject = "Strona C",
-                    Team = new Team()
                 },
 
 
