@@ -62,8 +62,8 @@
                     <li class="@Html.IsSelected(actions: "Test3", controllers: "Admin")">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Test3"><i class="fa fa-calendar"></i> Logowanie czasu pracy</a>
                     </li>
-                    <li class="@Html.IsSelected(actions: "Test2", controllers: "Admin")">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Test2"><i class="fa fa-user"></i> Dodawanie pracowników</a>
+                    <li class="@Html.IsSelected(actions: "WorkerAdd", controllers: "Workers")">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Workers" asp-action="WorkerAdd"><i class="fa fa-user"></i> Dodawanie pracowników</a>
                     </li>
                     <li class="@Html.IsSelected(actions: "Teams", controllers: "Admin")">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Teams"><i class="fa fa-users"></i>Zespoły/zlecenia</a>

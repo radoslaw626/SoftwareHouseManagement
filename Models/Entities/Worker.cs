@@ -26,7 +26,7 @@ namespace SoftwareHouseManagement.Models.Entities
         [Required]
         public string Password { get; set; }
         
-        public long ComputerId { get; set; }
+        public long? ComputerId { get; set; }
         public  virtual Computer Computer { get; set; }
         public virtual IList<Team> Teams { get; set; }
         public virtual IList<HoursWorked> HoursWorked { get; set; }

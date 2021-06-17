@@ -16,24 +16,27 @@ namespace SoftwareHouseManagement.Controllers
     {
 
         private readonly WorkersService _workersService;
+        private readonly PositionService _positionService;
         private readonly SoftwareHouseDbContext _context;
 
-        public WorkersController( WorkersService workersService, SoftwareHouseDbContext context)
+        public WorkersController( WorkersService workersService, PositionService positionService, SoftwareHouseDbContext context)
         {
             _workersService = workersService;
+            _positionService = positionService;
             _context = context;
         }
 
         [HttpGet]
         public IActionResult WorkerAdd()
         {
+            ViewBag.Positions = _positionService.GetAll();
             return View();
         }
         
         [HttpPost]
-        public IActionResult WorkerAdd(string firstName, string lastName, string email, string password)
+        public IActionResult WorkerAdd(string firstName, string lastName, string email, string password, long positionId)
         {
-            //_workersService.AddWorker(firstName, lastName, email, password);
+            _workersService.AddWorker(firstName, lastName, email, password, positionId);
             return RedirectToAction("WorkerAdd");
         }
     }

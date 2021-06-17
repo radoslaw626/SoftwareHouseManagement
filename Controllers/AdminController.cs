@@ -29,11 +29,6 @@ namespace SoftwareHouseManagement.Controllers
             return View();
         }
 
-        public IActionResult Test2()
-        {
-            return View();
-        }
-
         public IActionResult Test3()
         {
             return View();
