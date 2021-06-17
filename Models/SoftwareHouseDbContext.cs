@@ -16,6 +16,10 @@ namespace SoftwareHouseManagement.Models
         public DbSet<Team> Teams { get; set; }
         public DbSet<Responsibilities> Responsibilities { get; set; }
         public DbSet<Position> Positions { get; set; }
+        public DbSet<Entities.Task> Tasks { get; set; }
+        public DbSet<HoursWorked> HoursWorked { get; set; }
+        public DbSet<Access> Accesses { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

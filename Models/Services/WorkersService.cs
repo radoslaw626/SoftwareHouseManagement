@@ -26,10 +26,33 @@ namespace SoftwareHouseManagement.Models.Services
                 Email = email,
                 Password = password,
                 Position= position,
-                PositionId = positionId
             };
             _context.Workers.Add(worker);
             _context.SaveChanges();
+        }
+        public IEnumerable<Worker> GetAll()
+        {
+            var workers = _context.Workers.Select(x => new Worker()
+            {
+                Id = x.Id,
+                Email = x.Email,
+                Password = x.Password,
+                FirstName = x.FirstName,
+                LastName = x.LastName
+            }).ToList();
+            return workers;
+        }
+        public IEnumerable<Worker> GetAllWithoutComputer()
+        {
+            var workers = _context.Workers.Where(y=>y.Computer==null).Select(x => new Worker()
+            {
+                Id = x.Id,
+                Email = x.Email,
+                Password = x.Password,
+                FirstName = x.FirstName,
+                LastName = x.LastName
+            }).ToList();
+            return workers;
         }
     }
 }

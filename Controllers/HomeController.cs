@@ -13,10 +13,12 @@ namespace SoftwareHouseManagement.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly SoftwareHouseDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, SoftwareHouseDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -65,8 +67,22 @@ namespace SoftwareHouseManagement.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public IActionResult DodajZlecenie()
+        [HttpGet]
+        public IActionResult AddTask()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddTask(string taskSubject)
+        {
+            var task = new Task()
+            {
+                Subject = taskSubject,
+                ClientId = 1
+            };
+            _context.Tasks.Add(task);
+            _context.SaveChanges();
             return View();
         }
         public IActionResult Login()

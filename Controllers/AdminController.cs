@@ -34,13 +34,7 @@ namespace SoftwareHouseManagement.Controllers
             return View();
         }
 
-        
-
         public IActionResult Teams()
-        {
-            return View();
-        }
-        public IActionResult AssignComputer()
         {
             return View();
         }

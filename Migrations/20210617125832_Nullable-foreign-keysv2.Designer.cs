@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SoftwareHouseManagement.Models;
 
 namespace SoftwareHouseManagement.Migrations
 {
     [DbContext(typeof(SoftwareHouseDbContext))]
-    partial class SoftwareHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210617125832_Nullable-foreign-keysv2")]
+    partial class Nullableforeignkeysv2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,7 +63,7 @@ namespace SoftwareHouseManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Accesses");
+                    b.ToTable("Access");
                 });
 
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Client", b =>
@@ -183,7 +185,7 @@ namespace SoftwareHouseManagement.Migrations
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Tasks");
+                    b.ToTable("Task");
                 });
 
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Team", b =>

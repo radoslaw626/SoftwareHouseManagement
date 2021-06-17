@@ -65,15 +65,15 @@
                     <li class="@Html.IsSelected(actions: "WorkerAdd", controllers: "Workers")">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Workers" asp-action="WorkerAdd"><i class="fa fa-user"></i> Dodawanie pracowników</a>
                     </li>
-                    <li class="@Html.IsSelected(actions: "Teams", controllers: "Admin")">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Teams"><i class="fa fa-users"></i>Zespoły/zlecenia</a>
+                    <li class="@Html.IsSelected(actions: "Teams", controllers: "Teams")">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Teams"><i class="fa fa-users"></i>Zespoły/zlecenia</a>
                     </li>
 
                     <li class="@Html.IsSelected(actions: "Positions", controllers: "Positions")">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Positions" asp-action="Positions"><i class="fa fa-edit"></i>Zarządzanie stanowiskami</a>
                     </li>
-                    <li class="@Html.IsSelected(actions: "AssignComputer", controllers: "Admin")">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="AssignComputer"><i class="fa fa-desktop"></i> Zarządzanie komputerami</a>
+                    <li class="@Html.IsSelected(actions: "Computers", controllers: "Computers")">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Computers" asp-action="Computers"><i class="fa fa-desktop"></i> Zarządzanie komputerami</a>
                     </li>
                     <li>
                         <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index"><i class="fa fa-download"></i> CSV za ostatni miesiąc</a>

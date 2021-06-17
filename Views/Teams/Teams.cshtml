@@ -1,0 +1,130 @@
+﻿<div class="panel panel-default mt-5" style="width:auto">
+    <div class="panel-heading">
+        Zespoły
+    </div>
+    <div class="panel-body">
+        <form>
+            <table class="table">
+                <tr>
+                    <th>
+                        Zespół
+                    </th>
+                    <th class="text-center">
+                        Ilość członków
+                    </th>
+                    <th>
+                        Projekt
+                    </th>
+                    <th class="text-center">
+                        Przypisane Godziny
+                    </th>
+                    <th></th>
+                </tr>
+
+                <tr>
+                    @*@Html.DisplayFor(modelItem => item.LastName)*@
+                    <td>
+                        Team A
+                    </td>
+                    <td class="text-center">
+                        3
+                    </td>
+                    <td>
+                        Strona A
+                    </td>
+                    <td class="text-center">
+                        60:00
+                    </td>
+                    <td>
+                        @Html.ActionLink("Modyfikuj", "Index", new { id = 1 }) |
+                        @Html.ActionLink("Usuń", "Index", new { id = 1 })
+                    </td>
+                </tr>
+                <tr>
+                    @*@Html.DisplayFor(modelItem => item.LastName)*@
+                    <td>
+                        Team B
+                    </td>
+                    <td class="text-center">
+                        3
+                    </td>
+                    <td>
+                        Strona B
+                    </td>
+                    <td class="text-center">
+                        55:00
+                    </td>
+                    <td>
+                        @Html.ActionLink("Modyfikuj", "Index", new { id = 1 }) |
+                        @Html.ActionLink("Usuń", "Index", new { id = 1 })
+                    </td>
+                </tr>
+                <tr>
+                    @*@Html.DisplayFor(modelItem => item.LastName)*@
+                    <td>
+                        Team C
+                    </td>
+                    <td class="text-center">
+                        3
+                    </td>
+                    <td>
+                        Strona C
+                    </td>
+                    <td class="text-center">
+                        80:00
+                    </td>
+                    <td>
+                        @Html.ActionLink("Modyfikuj", "Index", new { id = 1 }) |
+                        @Html.ActionLink("Usuń", "Index", new { id = 1 })
+                    </td>
+                </tr>
+
+            </table>
+        </form>
+    </div>
+
+</div>
+
+<div class="panel panel-default mt-5" style="width:auto">
+    <div class="panel-heading">
+        Dodaj nowy
+    </div>
+    <div class="panel-body">
+        <form>
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Zespół</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputEmail3" placeholder="Nazwa zespołu">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Zlecenie</label>
+                <div class="col-sm-10">
+                    <select class="form-control form-control-sm" aria-label="Default select example">
+                        <option selected>Wybierz zlecenie</option>
+                        <option value="1">Programista</option>
+                        <option value="2">Tester</option>
+                        <option value="3">Kierownik</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Przypisane Godziny</label>
+                <div class="col-sm-10">
+                    <div class="col-sm-2" style="padding-left: 0px !important;">
+                        <input class="form-control" type="number" min="0" step="1" placeholder="godziny" />
+                    </div>
+                    <div class="col-sm-2">
+                        <input class="form-control" type="number" min="0" max="59" step="1" placeholder="minuty" />
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Dodaj</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>

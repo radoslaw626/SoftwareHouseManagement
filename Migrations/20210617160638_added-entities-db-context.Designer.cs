@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SoftwareHouseManagement.Models;
 
 namespace SoftwareHouseManagement.Migrations
 {
     [DbContext(typeof(SoftwareHouseDbContext))]
-    partial class SoftwareHouseDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210617160638_added-entities-db-context")]
+    partial class addedentitiesdbcontext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

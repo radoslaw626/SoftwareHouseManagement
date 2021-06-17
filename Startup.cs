@@ -32,6 +32,8 @@ namespace SoftwareHouseManagement
             services.AddTransient<ResponsibilitiesService>();
             services.AddTransient<PositionService>();
             services.AddTransient<WorkersService>();
+            services.AddTransient<ComputersService>();
+            services.AddTransient<TeamsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
