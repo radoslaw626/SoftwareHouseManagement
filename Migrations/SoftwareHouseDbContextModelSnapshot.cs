@@ -114,13 +114,24 @@ namespace SoftwareHouseManagement.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<long>("Amount")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("Month")
                         .HasColumnType("datetime2");
+
+                    b.Property<long>("ProjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("TaskId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("WorkerId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TaskId");
 
                     b.HasIndex("WorkerId");
 
@@ -167,8 +178,8 @@ namespace SoftwareHouseManagement.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<TimeSpan>("AssignedHours")
-                        .HasColumnType("time");
+                    b.Property<long>("AssignedHours")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("ClientId")
                         .HasColumnType("bigint");
@@ -176,8 +187,8 @@ namespace SoftwareHouseManagement.Migrations
                     b.Property<string>("Subject")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("WorkedHours")
-                        .HasColumnType("time");
+                    b.Property<long>("WorkedHours")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -298,11 +309,17 @@ namespace SoftwareHouseManagement.Migrations
 
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.HoursWorked", b =>
                 {
+                    b.HasOne("SoftwareHouseManagement.Models.Entities.Task", "Task")
+                        .WithMany("HoursWorked")
+                        .HasForeignKey("TaskId");
+
                     b.HasOne("SoftwareHouseManagement.Models.Entities.Worker", "Worker")
                         .WithMany("HoursWorked")
                         .HasForeignKey("WorkerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Task");
 
                     b.Navigation("Worker");
                 });
@@ -374,6 +391,8 @@ namespace SoftwareHouseManagement.Migrations
 
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Task", b =>
                 {
+                    b.Navigation("HoursWorked");
+
                     b.Navigation("Team");
                 });
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,17 +11,18 @@ namespace SoftwareHouseManagement.Models.Entities
 {
     public class Task
     {
+        public Task()
+        {
+            HoursWorked = new Collection<HoursWorked>();
+        }
         public long Id { get; set; }
         public string Subject { get; set; }
-        [DisplayFormat(DataFormatString = "{0:hh\\:mm}", ApplyFormatInEditMode = true)]
-        [AllowNull]
-        public TimeSpan AssignedHours { get; set; }
-        [DisplayFormat(DataFormatString="{0:hh\\:mm}", ApplyFormatInEditMode = true)]
-        [AllowNull]
-        public TimeSpan WorkedHours { get; set; }
+        public long AssignedHours { get; set; }
+        public long WorkedHours { get; set; }
 
         public virtual Team Team { get; set; } 
         public virtual Client Client { get; set; }
         public long ClientId { get; set; }
+        public virtual IList<HoursWorked> HoursWorked { get; set; }
     }
 }

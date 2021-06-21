@@ -10,8 +10,8 @@ using SoftwareHouseManagement.Models;
 namespace SoftwareHouseManagement.Migrations
 {
     [DbContext(typeof(SoftwareHouseDbContext))]
-    [Migration("20210610174050_corrected_entity")]
-    partial class corrected_entity
+    [Migration("20210617193743_HoursWorked-modify")]
+    partial class HoursWorkedmodify
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -63,7 +63,7 @@ namespace SoftwareHouseManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Access");
+                    b.ToTable("Accesses");
                 });
 
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Client", b =>
@@ -116,6 +116,9 @@ namespace SoftwareHouseManagement.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<long>("Amount")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("Month")
                         .HasColumnType("datetime2");
 
@@ -144,7 +147,7 @@ namespace SoftwareHouseManagement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Position");
+                    b.ToTable("Positions");
                 });
 
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Responsibilities", b =>
@@ -169,8 +172,8 @@ namespace SoftwareHouseManagement.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<TimeSpan>("AssignedHours")
-                        .HasColumnType("time");
+                    b.Property<long>("AssignedHours")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("ClientId")
                         .HasColumnType("bigint");
@@ -178,14 +181,14 @@ namespace SoftwareHouseManagement.Migrations
                     b.Property<string>("Subject")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeSpan>("WorkedHours")
-                        .HasColumnType("time");
+                    b.Property<long>("WorkedHours")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
-                    b.ToTable("Task");
+                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Team", b =>
@@ -201,13 +204,14 @@ namespace SoftwareHouseManagement.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("TaskId")
+                    b.Property<long?>("TaskId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("TaskId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[TaskId] IS NOT NULL");
 
                     b.ToTable("Teams");
                 });
@@ -219,7 +223,7 @@ namespace SoftwareHouseManagement.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("ComputerId")
+                    b.Property<long?>("ComputerId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Email")
@@ -238,13 +242,14 @@ namespace SoftwareHouseManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("PositionId")
+                    b.Property<long?>("PositionId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ComputerId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[ComputerId] IS NOT NULL");
 
                     b.HasIndex("PositionId");
 
@@ -322,9 +327,7 @@ namespace SoftwareHouseManagement.Migrations
                 {
                     b.HasOne("SoftwareHouseManagement.Models.Entities.Task", "Task")
                         .WithOne("Team")
-                        .HasForeignKey("SoftwareHouseManagement.Models.Entities.Team", "TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SoftwareHouseManagement.Models.Entities.Team", "TaskId");
 
                     b.Navigation("Task");
                 });
@@ -333,15 +336,11 @@ namespace SoftwareHouseManagement.Migrations
                 {
                     b.HasOne("SoftwareHouseManagement.Models.Entities.Computer", "Computer")
                         .WithOne("Worker")
-                        .HasForeignKey("SoftwareHouseManagement.Models.Entities.Worker", "ComputerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SoftwareHouseManagement.Models.Entities.Worker", "ComputerId");
 
                     b.HasOne("SoftwareHouseManagement.Models.Entities.Position", "Position")
                         .WithMany("Workers")
-                        .HasForeignKey("PositionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PositionId");
 
                     b.Navigation("Computer");
 

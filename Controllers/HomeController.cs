@@ -5,7 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text;
 using SoftwareHouseManagement.Models.Entities;
+using SoftwareHouseManagement.Models.Services;
+using System.Globalization;
 
 
 namespace SoftwareHouseManagement.Controllers
@@ -21,52 +24,6 @@ namespace SoftwareHouseManagement.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
-        {
-            var vm = new List<Task>
-            {
-                new Task()
-                {
-                    Id = 1,
-                    AssignedHours = new TimeSpan(0,50,0,0),
-                    WorkedHours = new TimeSpan(0,12,0,0),
-                    ClientId = 1,
-                    Subject = "Strona A",
-                },
-                new Task()
-                {
-                    Id = 2,
-                    AssignedHours = new TimeSpan(0,80,0,0),
-                    WorkedHours = new TimeSpan(0,12,0,0),
-                    ClientId = 1,
-                    Subject = "Strona B"
-                },
-                new Task()
-                {
-                    Id = 3,
-                    AssignedHours = new TimeSpan(0,60,0,0),
-                    WorkedHours = new TimeSpan(0,12,0,0),
-                    ClientId = 1,
-                    Subject = "Strona C",
-                },
-
-
-            };
-
-
-            return View(vm);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
         [HttpGet]
         public IActionResult AddTask()
         {
@@ -80,18 +37,12 @@ namespace SoftwareHouseManagement.Controllers
             {
                 Subject = taskSubject,
                 ClientId = 1
-            };
+            }; 
             _context.Tasks.Add(task);
             _context.SaveChanges();
             return View();
         }
-        public IActionResult Login()
-        {
-            return View();
-        }
-        public IActionResult Register()
-        {
-            return View();
-        }
+        
+
     }
 }

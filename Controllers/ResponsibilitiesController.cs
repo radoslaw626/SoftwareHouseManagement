@@ -26,10 +26,11 @@ namespace SoftwareHouseManagement.Controllers
         [HttpGet]
         public IActionResult Responsibilities(int id)
         {
-            ViewBag.Responsibilities = _responsibilitiesService.GetAll();
-            ViewBag.PositionId = id;
+
             try
             {
+                ViewBag.Responsibilities = _responsibilitiesService.GetAll();
+                ViewBag.PositionId = id;
                 var position = _context.Positions.Include("Responsibilities").FirstOrDefault(x => x.Id == id);
                 ViewBag.AssignedResponsibilities = position.Responsibilities;
                 ViewBag.PositionName = position.Name;
@@ -57,22 +58,39 @@ namespace SoftwareHouseManagement.Controllers
         [HttpGet]
         public IActionResult ResponsibilitiesModify(long id, long positionId)
         {
-            var responsibilities = _context.Responsibilities.FirstOrDefault(x => x.Id == id);
-            ViewBag.PositionId = positionId;
-            return View(responsibilities);
+            var responsiblity = new Responsibilities();
+            try
+            {
+                ViewBag.PositionId = positionId;
+                responsiblity = _context.Responsibilities.FirstOrDefault(x => x.Id == id);
+
+            }
+            catch (Exception)
+            {
+
+            }
+            return View(responsiblity);
         }
 
         [HttpPost]
         public IActionResult ResponsibilitiesModify(long id, string name, long positionId)
         {
-            _responsibilitiesService.ModifyResponsibility(id,name);
-            return RedirectToAction("Responsibilities", new {id = positionId });
+            _responsibilitiesService.ModifyResponsibility(id, name);
+            return RedirectToAction("Responsibilities", new { id = positionId });
         }
 
         [HttpGet]
         public IActionResult ResponsibilityDelete(long responsibilityId, long positionId)
         {
-            _responsibilitiesService.DeleteResponsibility(responsibilityId, positionId);
+            try
+            {
+                _responsibilitiesService.DeleteResponsibility(responsibilityId, positionId);
+            }
+            catch (Exception)
+            {
+
+            }
+
             return RedirectToAction("Responsibilities", new { id = positionId });
         }
     }

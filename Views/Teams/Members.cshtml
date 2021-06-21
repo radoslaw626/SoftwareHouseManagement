@@ -1,0 +1,42 @@
+﻿@model IEnumerable<SoftwareHouseManagement.Models.Entities.Worker>
+@{
+    ViewData["Title"] = "Members";
+}
+
+<div class="panel panel-default mt-5" style="width:auto">
+    <div class="panel-heading">
+        Członkowie
+    </div>
+    <div class="panel-body">
+        <form>
+            <table class="table">
+                <tr>
+                    <th>
+                        Imię i nazwisko
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in (@Model))
+                {
+                    <tr>
+                        <td>
+                            @item.FirstName @item.LastName
+                        </td>
+                        <td>
+                            @item.Email
+                        </td>
+                        <td>
+                            @Html.ActionLink("Usuń", "DeleteFromTeam", new {teamId=ViewBag.TeamId, workerId=item.Id })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </form>
+    </div>
+
+</div>

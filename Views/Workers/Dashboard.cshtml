@@ -78,19 +78,19 @@
                             <tr>
                                 @*@Html.DisplayFor(modelItem => item.LastName)*@
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Subject)
+                                    @*Html.DisplayFor(modelItem => item.Subject)*@
                                 </td>
                                 <td class="text-center">
                                     @{
-                                        string time = string.Format($"{(int)item.AssignedHours.TotalHours}:{item.AssignedHours:mm}");
+                                        //string time = string.Format($"{(int)item.AssignedHours.TotalHours}:{item.AssignedHours:mm}");
                                     }
-                                    @Html.DisplayFor(modelItem => time)
+                                    @*Html.DisplayFor(modelItem => time)*@
                                 </td>
                                 <td class="text-center">
                                     @{
-                                        string time2 = string.Format($"{(int)item.WorkedHours.TotalHours}:{item.WorkedHours:mm}");
+                                        //string time2 = string.Format($"{(int)item.WorkedHours.TotalHours}:{item.WorkedHours:mm}");
                                     }
-                                    @Html.DisplayFor(modelItem => time2)
+                                    @*Html.DisplayFor(modelItem => time2)*@
                                 </td>
                             </tr>
                         }
@@ -133,7 +133,7 @@
                         Strona A
                     </td>
                     <td>
-                        @Html.ActionLink("Dostępy", "Index", new { id = 1 })
+                        @Html.ActionLink("Dostępy", "Dashboard", new { id = 1 })
                     </td>
                 </tr>
                 <tr>
@@ -148,7 +148,7 @@
                         Strona B
                     </td>
                     <td>
-                        @Html.ActionLink("Dostępy", "Index", new { id = 1 })
+                        @Html.ActionLink("Dostępy", "Dashboard", new { id = 1 })
                     </td>
                 </tr>
                 <tr>
@@ -163,7 +163,7 @@
                         Strona C
                     </td>
                     <td>
-                        @Html.ActionLink("Dostępy", "Index", new { id = 1 })
+                        @Html.ActionLink("Dostępy", "Dashboard", new { id = 1 })
                     </td>
                 </tr>
 

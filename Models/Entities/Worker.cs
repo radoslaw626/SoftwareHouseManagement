@@ -23,7 +23,8 @@ namespace SoftwareHouseManagement.Models.Entities
         public string LastName { get; set; }
         [Required]
         public string Email { get; set; }
-        [Required]
+        [DataType(DataType.Password)]
+        [Required(ErrorMessage = "Pole 'Powtórz hasło' jest wymagane")]
         public string Password { get; set; }
         
         public long? ComputerId { get; set; }

@@ -1,4 +1,7 @@
-﻿<div class="panel panel-default mt-5" style="width:auto">
+﻿@using SoftwareHouseManagement.Models.Entities
+@using SoftwareHouseManagement.Helpers
+@using Task = SoftwareHouseManagement.Models.Entities.Task
+<div class="panel panel-default mt-5" style="width:auto">
     <div class="panel-heading">
         Zespoły
     </div>
@@ -12,7 +15,7 @@
                     <th class="text-center">
                         Ilość członków
                     </th>
-                    <th>
+                    <th class="text-center">
                         Projekt
                     </th>
                     <th class="text-center">
@@ -21,67 +24,35 @@
                     <th></th>
                 </tr>
 
-                <tr>
-                    @*@Html.DisplayFor(modelItem => item.LastName)*@
-                    <td>
-                        Team A
-                    </td>
-                    <td class="text-center">
-                        3
-                    </td>
-                    <td>
-                        Strona A
-                    </td>
-                    <td class="text-center">
-                        60:00
-                    </td>
-                    <td>
-                        @Html.ActionLink("Modyfikuj", "Index", new { id = 1 }) |
-                        @Html.ActionLink("Usuń", "Index", new { id = 1 })
-                    </td>
-                </tr>
-                <tr>
-                    @*@Html.DisplayFor(modelItem => item.LastName)*@
-                    <td>
-                        Team B
-                    </td>
-                    <td class="text-center">
-                        3
-                    </td>
-                    <td>
-                        Strona B
-                    </td>
-                    <td class="text-center">
-                        55:00
-                    </td>
-                    <td>
-                        @Html.ActionLink("Modyfikuj", "Index", new { id = 1 }) |
-                        @Html.ActionLink("Usuń", "Index", new { id = 1 })
-                    </td>
-                </tr>
-                <tr>
-                    @*@Html.DisplayFor(modelItem => item.LastName)*@
-                    <td>
-                        Team C
-                    </td>
-                    <td class="text-center">
-                        3
-                    </td>
-                    <td>
-                        Strona C
-                    </td>
-                    <td class="text-center">
-                        80:00
-                    </td>
-                    <td>
-                        @Html.ActionLink("Modyfikuj", "Index", new { id = 1 }) |
-                        @Html.ActionLink("Usuń", "Index", new { id = 1 })
-                    </td>
-                </tr>
+                @foreach (var item in (ViewBag.AssignedTeams as IEnumerable<Team>))
+                {
 
+                    <tr>
+                        <td>
+                            @item.Name     
+                        </td>
+                        <td class="text-center">
+                            @item.MemberCount
+                        </td>
+                        <td class="text-center">
+                            @item.Task.Subject
+                        </td>
+                        <td class="text-center">
+                            @{
+                                var timeSpan = TimeSpan.FromTicks(item.Task.AssignedHours);
+                            }
+                            @timeSpan.TimeStampConverter()
+                        </td>
+                        <td class="text-center">
+                            @Html.ActionLink("Dostępy", "Accesses", new { teamId = item.Id })|
+                            @Html.ActionLink("Członkowie", "Members", new { teamId = item.Id })|
+                            @Html.ActionLink("Usuń", "Teams", new { id = item.Id })
+                        </td>
+                    </tr>
+                }
             </table>
         </form>
-    </div>
+    </div>            
 
 </div>
 
@@ -90,21 +61,31 @@
         Dodaj nowy
     </div>
     <div class="panel-body">
-        <form>
+        @using (Html.BeginForm("TeamAssignTask", "Teams", FormMethod.Post, new { }))
+        {
+
+
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Zespół</label>
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Drużyna</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputEmail3" placeholder="Nazwa zespołu">
+                    <select class="form-control form-control-sm" aria-label="Default select example" name="teamId">
+                        <option selected>Wybierz drużynę</option>
+                        @foreach (var item in (ViewBag.NotAssignedTeams as IEnumerable<Team>))
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-2 col-form-label">Zlecenie</label>
                 <div class="col-sm-10">
-                    <select class="form-control form-control-sm" aria-label="Default select example">
+                    <select class="form-control form-control-sm" aria-label="Default select example" name="taskId">
                         <option selected>Wybierz zlecenie</option>
-                        <option value="1">Programista</option>
-                        <option value="2">Tester</option>
-                        <option value="3">Kierownik</option>
+                        @foreach (var item in (ViewBag.NotAssignedTasks as IEnumerable<Task>))
+                        {
+                            <option value="@item.Id">@item.Subject</option>
+                        }
                     </select>
                 </div>
             </div>
@@ -112,10 +93,10 @@
                 <label for="inputPassword3" class="col-sm-2 col-form-label">Przypisane Godziny</label>
                 <div class="col-sm-10">
                     <div class="col-sm-2" style="padding-left: 0px !important;">
-                        <input class="form-control" type="number" min="0" step="1" placeholder="godziny" />
+                        <input class="form-control" type="number" min="0" step="1" placeholder="godziny" name="hours" />
                     </div>
                     <div class="col-sm-2">
-                        <input class="form-control" type="number" min="0" max="59" step="1" placeholder="minuty" />
+                        <input class="form-control" type="number" min="0" max="59" step="1" placeholder="minuty" name="minutes" />
                     </div>
                 </div>
             </div>
@@ -124,7 +105,70 @@
                     <button type="submit" class="btn btn-primary">Dodaj</button>
                 </div>
             </div>
-        </form>
+        }
+    </div>
+</div>
+<div class="panel panel-default mt-5" style="width:auto">
+    <div class="panel-heading">
+        Dodaj pracownika do drużyny
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("TeamAssignWorker", "Teams", FormMethod.Post, new { }))
+        {
+
+
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Drużyna</label>
+                <div class="col-sm-10">
+                    <select class="form-control form-control-sm" aria-label="Default select example" name="teamId">
+                        <option selected>Wybierz drużynę</option>
+                        @foreach (var item in (ViewBag.AssignedTeams as IEnumerable<Team>))
+                        {
+                            <option value="@item.Id">@item.Name</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Pracownik</label>
+                <div class="col-sm-10">
+                    <select class="form-control form-control-sm" aria-label="Default select example" name="workerId">
+                        <option selected>Wybierz pracownika</option>
+                        @foreach (var item in (ViewBag.AllWorkers as IEnumerable<Worker>))
+                        {
+                            <option value="@item.Id">@item.FirstName @item.LastName - @item.Email</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Dodaj</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<div class="panel panel-default mt-5" style="width:auto">
+    <div class="panel-heading">
+        Dodaj nową drużynę
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("TeamAdd", "Teams", FormMethod.Post, new { }))
+        {
+            <div class="form-group row">
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Drużyna</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputEmail3" placeholder="Nazwa drużyny" name="name">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Dodaj</button>
+                </div>
+            </div>
+        }
+
     </div>
 
 </div>
