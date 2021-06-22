@@ -47,7 +47,7 @@ namespace SoftwareHouseManagement.Models.Services
             return computers;
         }
 
-        public void AssignComputer(long workerId, long computerId)
+        public void AssignComputer(string workerId, long computerId)
         {
             var worker = _context.Workers.FirstOrDefault(x => x.Id == workerId);
             worker.ComputerId = computerId;
@@ -69,8 +69,8 @@ namespace SoftwareHouseManagement.Models.Services
 
         public void DeleteAssignedComputers(long workerId)
         {
-            var worker = _context.Workers.Include(x => x.Computer).FirstOrDefault(y => y.Id == workerId);
-            worker.Computer = null;
+            //var worker = _context.Workers.Include(x => x.Computer).FirstOrDefault(y => y.Id == workerId);
+            //worker.Computer = null;
             _context.SaveChanges();
         }
     }

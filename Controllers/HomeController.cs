@@ -36,7 +36,7 @@ namespace SoftwareHouseManagement.Controllers
             var task = new Task()
             {
                 Subject = taskSubject,
-                ClientId = 1
+                ClientId =  1
             }; 
             _context.Tasks.Add(task);
             _context.SaveChanges();

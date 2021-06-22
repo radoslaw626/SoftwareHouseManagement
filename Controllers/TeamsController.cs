@@ -55,7 +55,7 @@ namespace SoftwareHouseManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult TeamAssignWorker(long teamId, long workerId)
+        public IActionResult TeamAssignWorker(long teamId, string workerId)
         {
             _teamsService.AssignWorkerToTeam(teamId, workerId);
             return RedirectToAction("Teams");
@@ -70,7 +70,7 @@ namespace SoftwareHouseManagement.Controllers
         }
 
         [HttpGet]
-        public IActionResult DeleteFromTeam(long teamId, long workerId)
+        public IActionResult DeleteFromTeam(long teamId, string workerId)
         {
             _teamsService.DeleteFromTeam(teamId, workerId);
             return RedirectToAction("Members", new {teamId = teamId});

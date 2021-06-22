@@ -1,4 +1,9 @@
-﻿@{
+﻿@model SoftwareHouseManagement.Models.RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+@{
     Layout = null;
 }
 <html lang="en">
@@ -14,9 +19,7 @@
 
     <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
     <style>
-        
-
-        </style>
+    </style>
     <!-- Bootstrap core CSS -->
     <link href="~/assets/css/bootstrap-min.css" rel="stylesheet">
 
@@ -25,17 +28,39 @@
 </head>
 
 <body class="text-center">
-<form class="form-signin">
-    <h1 class="h3 mb-3 font-weight-normal">Zarejestruj się</h1><br/>
-    <label for="inputEmail" class="sr-only">Email address</label>
-    <input type="email" id="inputEmail" class="form-control" placeholder="Email" required="" autofocus="">
-    <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" id="inputPassword" class="form-control" placeholder="Hasło" required="" style="margin-bottom: -1px !important;">
-    <input type="password" id="inputPassword" class="form-control" placeholder="Powtórz hasło" required="">
-    <br />
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Zarejestruj się</button>
-</form>
+    @*<form class="form-signin">
+            <h1 class="h3 mb-3 font-weight-normal">Zarejestruj się</h1><br/>
+            <label for="inputEmail" class="sr-only">Email address</label>
+            <input type="email" id="inputEmail" class="form-control" placeholder="Email" required="" autofocus="">
+            <label for="inputPassword" class="sr-only">Password</label>
+            <input type="password" id="inputPassword" class="form-control" placeholder="Hasło" required="" style="margin-bottom: -1px !important;">
+            <input type="password" id="inputPassword" class="form-control" placeholder="Powtórz hasło" required="">
+            <br />
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Zarejestruj się</button>
+        </form>*@
+    
 
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ConfirmPassword"></label>
+        <input asp-for="ConfirmPassword" class="form-control" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn-primary">Register</button>
+</form>
 
 </body>
 <app-content ng-version="11.1.0"></app-content>

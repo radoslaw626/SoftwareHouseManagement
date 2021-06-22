@@ -60,11 +60,11 @@ namespace SoftwareHouseManagement.Models.Services
             _context.SaveChanges();
         }
 
-        public void AssignWorkerToTeam(long teamId, long workerId)
+        public void AssignWorkerToTeam(long teamId, string workerId)
         {
             var team = _context.Teams.Include(y=>y.Workers).FirstOrDefault(x => x.Id == teamId);
             var worker = _context.Workers.FirstOrDefault(z => z.Id == workerId);
-            team.Workers.Add(worker);
+           team.Workers.Add(worker);
             team.MemberCount++;
             _context.SaveChanges();
         }
@@ -76,7 +76,7 @@ namespace SoftwareHouseManagement.Models.Services
             return team.Workers;
         }
 
-        public void DeleteFromTeam(long teamId, long workerId)
+        public void DeleteFromTeam(long teamId, string workerId)
         {
             var team = _context.Teams.Include(x => x.Workers)
                 .FirstOrDefault(y => y.Id == teamId);

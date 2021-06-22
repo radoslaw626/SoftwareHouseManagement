@@ -43,7 +43,7 @@ namespace SoftwareHouseManagement.Controllers
         }
 
         [HttpPost]
-        public IActionResult ComputerAssign(long workerId, long computerId)
+        public IActionResult ComputerAssign(string workerId, long computerId)
         {
             _computersService.AssignComputer(workerId, computerId);
             return RedirectToAction("Computers");

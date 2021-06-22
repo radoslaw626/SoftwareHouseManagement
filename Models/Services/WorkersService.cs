@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using SoftwareHouseManagement.Models.Entities;
+using Task = SoftwareHouseManagement.Models.Entities.Task;
 
 namespace SoftwareHouseManagement.Models.Services
 {
@@ -24,7 +29,7 @@ namespace SoftwareHouseManagement.Models.Services
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
-                Password = password,
+                //Password = password,
                 Position= position,
             };
             _context.Workers.Add(worker);
@@ -36,7 +41,7 @@ namespace SoftwareHouseManagement.Models.Services
             {
                 Id = x.Id,
                 Email = x.Email,
-                Password = x.Password,
+                //Password = x.Password,
                 FirstName = x.FirstName,
                 LastName = x.LastName
             }).ToList();
@@ -48,11 +53,26 @@ namespace SoftwareHouseManagement.Models.Services
             {
                 Id = x.Id,
                 Email = x.Email,
-                Password = x.Password,
+               //Password = x.Password,
                 FirstName = x.FirstName,
                 LastName = x.LastName
             }).ToList();
             return workers;
+        }
+
+        public List<Task> GetWorkersTasks(string workerId)
+        {
+            var tasks = new List<Task>();
+            var worker = _context.Workers
+                .Include(y=>y.Teams).ThenInclude(z=>z.Task)
+                .FirstOrDefault(x => x.Id == workerId);
+            foreach(var item in worker.Teams)
+            {
+                tasks.Add(item.Task);
+            }
+
+            return tasks;
+
         }
     }
 }
