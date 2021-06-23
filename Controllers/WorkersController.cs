@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using SoftwareHouseManagement.Helpers;
 using SoftwareHouseManagement.Models;
 using SoftwareHouseManagement.Models.Entities;
 using SoftwareHouseManagement.Models.Services;
@@ -87,32 +89,61 @@ namespace SoftwareHouseManagement.Controllers
         [HttpGet]
         public IActionResult Dashboard()
         {
-            var vm = new List<Task>
-            {
-            };
+            var identity = _userManager.FindByEmailAsync(User.Identity.Name).Result;
 
-            return View(vm);
+            if (identity.PositionId != null)
+            {
+                ViewBag.Position = _context.Positions.FirstOrDefault(x => x.Id == identity.PositionId);
+            }
+            else
+            {
+                ViewBag.Position = new Position();
+            }
+
+            if (identity.ComputerId != null)
+            {
+                ViewBag.Computer = _context.Computers
+                    .FirstOrDefault(y => y.Id == identity.ComputerId);
+            }
+            else
+            {
+                ViewBag.Computer = new Computer();
+            }
+
+            var worker = _context.Workers.Include(ha => ha.HoursWorked).FirstOrDefault(hb => hb.Id == identity.Id);
+            if (identity.Teams != null)
+            {
+                var workerTaskInclude = _context.Workers.Include(a => a.Teams).ThenInclude(b => b.Task).Include(d=>d.Teams).ThenInclude(e=>e.Accesses)
+                    .FirstOrDefault(c => c.Id == identity.Id);
+                ViewBag.Teams = workerTaskInclude.Teams;
+            }
+            return View(identity);
+
         }
 
-        //public FileContentResult DownloadCSV()
-        //{
-        //    var currentUserId = 1;
-        //    var worker = _context.Workers.FirstOrDefault(x => x.Id == currentUserId);
-        //    var position = _context.Positions.FirstOrDefault(y => y.Id == worker.PositionId);
-        //    var currentDate = DateTime.Now;
-        //    var hoursWorked = _context.HoursWorked.Where(z => z.Month < currentDate).Sum(za => za.Amount);
+        public FileContentResult DownloadCSV()
+        {
+            var identity = _userManager.FindByEmailAsync(User.Identity.Name).Result;
+            var worker = _context.Workers.FirstOrDefault(x => x.Id == identity.Id);
+            var position = _context.Positions.FirstOrDefault(y => y.Id == worker.PositionId);
+            var currentDate = DateTime.Now;
+            var first = new DateTime(currentDate.Year, currentDate.Month, 1);
+            var hoursWorkedTicks = _context.HoursWorked.Where(z => z.Month < currentDate & z.Month >=first & z.WorkerId==identity.Id).Sum(za => za.Amount);
+            var timeSpanW = TimeSpan.FromTicks(hoursWorkedTicks);
+            var hoursWorkedString= string.Format($"{(int)timeSpanW.TotalHours}:{timeSpanW:mm}");
+            var hoursInt = hoursWorkedTicks / 36000000000;
 
-        //    string csv = $"Imię:, {worker.FirstName}\n" +
-        //                 $"Nazwisko:, {worker.LastName}\n" +
-        //                 $"Email:, {worker.Email}\n" +
-        //                 $"Pozycja:, {position.Name}\n" +
-        //                 $"Stawka:, {position.Wage}\n" +
-        //                 $"Przepracowane godziny:, {hoursWorked}\n" +
-        //                 $"Zarobek:, {hoursWorked * position.Wage}, PLN";
-        //    var data = Encoding.UTF8.GetBytes(csv);
-        //    var result = Encoding.UTF8.GetPreamble().Concat(data).ToArray();
-        //    return File(result, "text/csv", "PaySlip.csv");
-        //}
+            string csv = $"Imię:, {worker.FirstName}\n" +
+                         $"Nazwisko:, {worker.LastName}\n" +
+                         $"Email:, {worker.Email}\n" +
+                         $"Pozycja:, {position.Name}\n" +
+                         $"Stawka:, {position.Wage}, PLN\n" +
+                         $"Przepracowane godziny:, {hoursWorkedString},h\n" +
+                         $"Zarobek:, {hoursInt * position.Wage}, PLN";
+            var data = Encoding.UTF8.GetBytes(csv);
+            var result = Encoding.UTF8.GetPreamble().Concat(data).ToArray();
+            return File(result, "text/csv", "PaySlip.csv");
+        }
 
 
         [HttpGet]
@@ -196,20 +227,15 @@ namespace SoftwareHouseManagement.Controllers
         public IActionResult LoginTime(long projectId, string date, int hours, int minutes)
         {
             var identity = _userManager.FindByEmailAsync(User.Identity.Name).Result;
-            var hoursTicks = hours * 36000000000;
-            var minutesTicks = minutes * 600000000;
-            string format = "MM-yyyy";
-            CultureInfo provider = CultureInfo.InvariantCulture;
-            var hoursWorked = new HoursWorked()
-            {
-                WorkerId = identity.Id,
-                Amount = hoursTicks+minutesTicks,
-                Month = DateTime.ParseExact(date, format, provider),
-                TaskId= projectId
-            };
-            _context.HoursWorked.Add(hoursWorked);
-            _context.SaveChanges();
+            _workersService.LoginTime(projectId, date, hours, minutes, identity);
             return RedirectToAction("LoginTime");
+        }
+
+        [HttpGet]
+        public IActionResult TeamAccesses(long teamId)
+        {
+            ViewBag.Accesses = _context.Teams.Include(x => x.Accesses).FirstOrDefault(y => y.Id == teamId).Accesses;
+            return View();
         }
     }
 }

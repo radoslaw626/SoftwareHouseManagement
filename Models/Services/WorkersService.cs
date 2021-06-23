@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -73,6 +74,26 @@ namespace SoftwareHouseManagement.Models.Services
 
             return tasks;
 
+        }
+
+        public void LoginTime(long projectId, string date, int hours, int minutes, Worker identity)
+        {
+            
+            var hoursTicks = hours * 36000000000;
+            var minutesTicks = minutes * 600000000;
+            string format = "MM-yyyy";
+            CultureInfo provider = CultureInfo.InvariantCulture;
+            var hoursWorked = new HoursWorked()
+            {
+                Amount = hoursTicks + minutesTicks,
+                Month = DateTime.ParseExact(date, format, provider),
+                TaskId = projectId
+            };
+            var worker = _context.Workers.Include(x => x.HoursWorked).FirstOrDefault(y => y.Id == identity.Id);
+            var task = _context.Tasks.FirstOrDefault(a => a.Id == projectId);
+            task.WorkedHours += hoursTicks + minutesTicks;
+            worker.HoursWorked.Add(hoursWorked);
+            _context.SaveChanges();
         }
     }
 }

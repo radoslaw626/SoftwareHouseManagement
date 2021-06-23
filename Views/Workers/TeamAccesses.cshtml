@@ -1,0 +1,32 @@
+﻿@using SoftwareHouseManagement.Models.Entities
+
+@{
+    ViewData["Title"] = "Accesses";
+}
+<div class="panel panel-default mt-5" style="width:auto">
+    <div class="panel-heading">
+        Dostępy
+    </div>
+    <div class="panel-body">
+        <form>
+            <table class="table">
+                <tr>
+                    <th>
+                        Nazwa
+                    </th>
+                </tr>
+
+                @foreach (var item in (ViewBag.Accesses as IEnumerable<Access>))
+                {
+                    <tr>
+                        <td>
+                            @item.Name
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </form>
+    </div>
+
+</div>

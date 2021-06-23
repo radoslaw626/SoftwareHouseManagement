@@ -1,6 +1,7 @@
-﻿@model List<SoftwareHouseManagement.Models.Entities.Task>
+﻿@model SoftwareHouseManagement.Models.Entities.Worker
 @using SoftwareHouseManagement.Helpers
 @using SoftwareHouseManagement.Models.Entities
+@using Task = SoftwareHouseManagement.Models.Entities.Task
 
 <div class="row">
     <div class="col-md-5">
@@ -15,37 +16,40 @@
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                 <div class="fw-bold"><b>Imię i nazwisko</b></div>
-                                Radosław Micał
+                                @Model.FirstName @Model.LastName
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                 <div class="font-weight-bold"><b>Email</b></div>
-                                micalradoslaw@gmail.com
+                                @Model.Email
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                 <div class="font-weight-bold"><b>Przypisany komputer</b></div>
-                                Msi GL63
+                                @Model.Computer.Model
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                 <div class="font-weight-bold"><b>Pozycja</b></div>
-                                Programista-Junior
+                                @Model.Position.Name
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                 <div class="font-weight-bold"><b>Stawka godzinowa</b></div>
-                                25.50 PLN
+                                @Model.Position.Wage
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                 <div class="font-weight-bold"><b>Godziny przepracowane w tym miesiącu</b></div>
-                                12:00 h
+                                @{
+                                    var timeSpan = TimeSpan.FromTicks(Model.HoursWorked.Sum(x => x.Amount));
+                                }
+                                @timeSpan.TimeStampConverter()
                             </div>
                         </li>
                     </ol>
@@ -73,26 +77,25 @@
                                 Przepracowane godziny
                             </th>
                         </tr>
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.Teams)
                         {
-                            <tr>
-                                @*@Html.DisplayFor(modelItem => item.LastName)*@
-                                <td>
-                                    @*Html.DisplayFor(modelItem => item.Subject)*@
-                                </td>
-                                <td class="text-center">
-                                    @{
-                                        //string time = string.Format($"{(int)item.AssignedHours.TotalHours}:{item.AssignedHours:mm}");
-                                    }
-                                    @*Html.DisplayFor(modelItem => time)*@
-                                </td>
-                                <td class="text-center">
-                                    @{
-                                        //string time2 = string.Format($"{(int)item.WorkedHours.TotalHours}:{item.WorkedHours:mm}");
-                                    }
-                                    @*Html.DisplayFor(modelItem => time2)*@
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Task.Subject)
+                            </td>
+                            <td class="text-center">
+                                @{
+                                    var timeSpanA = TimeSpan.FromTicks(item.Task.AssignedHours);
+                                }
+                                @timeSpanA.TimeStampConverter()
+                            </td>
+                            <td class="text-center">
+                                @{
+                                    var timeSpanW = TimeSpan.FromTicks(item.Task.WorkedHours);
+                                }
+                                @timeSpanW.TimeStampConverter()
+                            </td>
+                        </tr>
                         }
                     </table>
                 </form>
@@ -120,52 +123,23 @@
                     </th>
                     <th></th>
                 </tr>
-
-                <tr>
-                    @*@Html.DisplayFor(modelItem => item.LastName)*@
-                    <td>
-                        Team A
-                    </td>
-                    <td>
-                        3
-                    </td>
-                    <td>
-                        Strona A
-                    </td>
-                    <td>
-                        @Html.ActionLink("Dostępy", "Dashboard", new { id = 1 })
-                    </td>
-                </tr>
-                <tr>
-                    @*@Html.DisplayFor(modelItem => item.LastName)*@
-                    <td>
-                        Team B
-                    </td>
-                    <td>
-                        3
-                    </td>
-                    <td>
-                        Strona B
-                    </td>
-                    <td>
-                        @Html.ActionLink("Dostępy", "Dashboard", new { id = 1 })
-                    </td>
-                </tr>
-                <tr>
-                    @*@Html.DisplayFor(modelItem => item.LastName)*@
-                    <td>
-                        Team C
-                    </td>
-                    <td>
-                        3
-                    </td>
-                    <td>
-                        Strona C
-                    </td>
-                    <td>
-                        @Html.ActionLink("Dostępy", "Dashboard", new { id = 1 })
-                    </td>
-                </tr>
+                @foreach (var item in Model.Teams)
+                {
+                    <tr>
+                        <td>
+                            @item.Name
+                        </td>
+                        <td>
+                            @item.MemberCount
+                        </td>
+                        <td>
+                            @item.Task.Subject
+                        </td>
+                        <td>
+                            @Html.ActionLink("Dostępy", "TeamAccesses", new { teamId = item.Id })
+                        </td>
+                    </tr>
+                }
 
             </table>
         </form>
