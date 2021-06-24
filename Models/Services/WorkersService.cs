@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using SoftwareHouseManagement.Models.Entities;
+using Task = SoftwareHouseManagement.Models.Entities.Task;
 
 namespace SoftwareHouseManagement.Models.Services
 {
@@ -24,7 +30,7 @@ namespace SoftwareHouseManagement.Models.Services
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
-                Password = password,
+                //Password = password,
                 Position= position,
             };
             _context.Workers.Add(worker);
@@ -36,7 +42,7 @@ namespace SoftwareHouseManagement.Models.Services
             {
                 Id = x.Id,
                 Email = x.Email,
-                Password = x.Password,
+                //Password = x.Password,
                 FirstName = x.FirstName,
                 LastName = x.LastName
             }).ToList();
@@ -48,11 +54,46 @@ namespace SoftwareHouseManagement.Models.Services
             {
                 Id = x.Id,
                 Email = x.Email,
-                Password = x.Password,
+               //Password = x.Password,
                 FirstName = x.FirstName,
                 LastName = x.LastName
             }).ToList();
             return workers;
+        }
+
+        public List<Task> GetWorkersTasks(string workerId)
+        {
+            var tasks = new List<Task>();
+            var worker = _context.Workers
+                .Include(y=>y.Teams).ThenInclude(z=>z.Task)
+                .FirstOrDefault(x => x.Id == workerId);
+            foreach(var item in worker.Teams)
+            {
+                tasks.Add(item.Task);
+            }
+
+            return tasks;
+
+        }
+
+        public void LoginTime(long projectId, string date, int hours, int minutes, Worker identity)
+        {
+            
+            var hoursTicks = hours * 36000000000;
+            var minutesTicks = minutes * 600000000;
+            string format = "MM-yyyy";
+            CultureInfo provider = CultureInfo.InvariantCulture;
+            var hoursWorked = new HoursWorked()
+            {
+                Amount = hoursTicks + minutesTicks,
+                Month = DateTime.ParseExact(date, format, provider),
+                TaskId = projectId
+            };
+            var worker = _context.Workers.Include(x => x.HoursWorked).FirstOrDefault(y => y.Id == identity.Id);
+            var task = _context.Tasks.FirstOrDefault(a => a.Id == projectId);
+            task.WorkedHours += hoursTicks + minutesTicks;
+            worker.HoursWorked.Add(hoursWorked);
+            _context.SaveChanges();
         }
     }
 }

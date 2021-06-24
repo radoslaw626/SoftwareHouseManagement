@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SoftwareHouseManagement.Models.Entities;
 
 namespace SoftwareHouseManagement.Models
 {
-    public class SoftwareHouseDbContext : DbContext
+    public class SoftwareHouseDbContext : IdentityDbContext<Worker>
     {
         public SoftwareHouseDbContext(DbContextOptions options): base(options) {}
 

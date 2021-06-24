@@ -46,7 +46,7 @@
                         <td class="text-center">
                             @Html.ActionLink("Dostępy", "Accesses", new { teamId = item.Id })|
                             @Html.ActionLink("Członkowie", "Members", new { teamId = item.Id })|
-                            @Html.ActionLink("Usuń", "Teams", new { id = item.Id })
+                            @Html.ActionLink("Usuń", "DeleteTeamContent", new { teamId = item.Id })
                         </td>
                     </tr>
                 }

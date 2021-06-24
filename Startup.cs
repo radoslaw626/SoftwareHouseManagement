@@ -8,8 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SoftwareHouseManagement.Models;
+using SoftwareHouseManagement.Models.Entities;
 using SoftwareHouseManagement.Models.Services;
 
 namespace SoftwareHouseManagement
@@ -29,11 +32,28 @@ namespace SoftwareHouseManagement
             services.AddControllersWithViews();
             services.AddDbContext<SoftwareHouseDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SoftwareHouse")));
+            services.AddDefaultIdentity<Worker>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<SoftwareHouseDbContext>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.SignIn.RequireConfirmedEmail = false;
+            });
             services.AddTransient<ResponsibilitiesService>();
             services.AddTransient<PositionService>();
             services.AddTransient<WorkersService>();
             services.AddTransient<ComputersService>();
             services.AddTransient<TeamsService>();
+            services.AddRazorPages();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "Cookie";
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(720);
+                options.LoginPath = "/Workers/Login";
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+                options.SlidingExpiration = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,7 +73,7 @@ namespace SoftwareHouseManagement
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
@@ -61,6 +81,7 @@ namespace SoftwareHouseManagement
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Workers}/{action=Dashboard}/{id?}");
+                endpoints.MapRazorPages();
             });
         }
     }

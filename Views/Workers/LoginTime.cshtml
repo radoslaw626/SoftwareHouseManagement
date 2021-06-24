@@ -1,30 +1,37 @@
-﻿<!DOCTYPE html>
+﻿
+@{
+    ViewData["Title"] = "LoginTime";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
 <html>
 <head>
     <title>Month Picker</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet" />
     <link rel="stylesheet" type="text/css" href="~/assets/css/date-picker.css">
 </head>
 <body>
-
     <div class="panel panel-default mt-5" style="width:auto">
         <div class="panel-heading">
             Logowanie przepracowanych godzin
         </div>
         <div class="panel-body">
-            <form>
+            @using (Html.BeginForm("LoginTime", "Workers", FormMethod.Post, new { }))
+            {
                 <fieldset class="form-group">
                     <div class="row">
                         <div class="col-md-2">
                             <label for="inputPassword3" class="col-form-label">Projekt</label>
                         </div>
-                    
+
                         <div class="col-sm-10">
-                            <select class="form-control form-control-sm" aria-label="Default select example">
+                            <select class="form-control form-control-sm" aria-label="Default select example" name="projectId">
                                 <option selected>Wybierz projekt</option>
-                                <option value="1">Projekt A</option>
-                                <option value="2">Projekt B</option>
-                                <option value="3">Projekt C</option>
+                                @foreach (var item in (ViewBag.WorkersTasks as IEnumerable<SoftwareHouseManagement.Models.Entities.Task>))
+                                {
+                                    <option value="@item.Id">@item.Subject</option>
+                                }
                             </select>
                         </div>
                     </div>
@@ -32,17 +39,17 @@
                 <div class="form-group row">
                     <label for="inputEmail3" class="col-sm-2 col-form-label">Miesiąc i rok</label>
                     <div class="col-sm-10">
-                        <input type="text" id="datepicker" class="mt-4 form-control" placeholder="Wybierz miesiąc"/>
+                        <input type="text" id="datepicker" class="mt-4 form-control" placeholder="Wybierz miesiąc" name="date" style="z-index: 99999 !important;" />
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="inputPassword3" class="col-sm-2 col-form-label">Godziny</label>
                     <div class="col-sm-10">
-                        <div class="col-sm-2"style="padding-left: 0px !important;">
-                            <input class="form-control" type="number" min="0" step="1" placeholder="godziny"/>
+                        <div class="col-sm-2" style="padding-left: 0px !important;">
+                            <input class="form-control" type="number" min="0" step="1" placeholder="godziny" name="hours" />
                         </div>
                         <div class="col-sm-2">
-                            <input class="form-control" type="number" min="0" max="59" step="1" placeholder="minuty"/>
+                            <input class="form-control" type="number" min="0" max="59" step="1" placeholder="minuty" name="minutes" />
                         </div>
                     </div>
                 </div>
@@ -51,12 +58,10 @@
                         <button type="submit" class="btn btn-primary">Dodaj</button>
                     </div>
                 </div>
-            </form>
+            }
         </div>
 
     </div>
-
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
