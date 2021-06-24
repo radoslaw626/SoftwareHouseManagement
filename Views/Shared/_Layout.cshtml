@@ -1,10 +1,13 @@
 ﻿@using SoftwareHouseManagement.Helpers
+@using Microsoft.AspNetCore.Identity
+@using SoftwareHouseManagement.Models.Entities
+@inject SignInManager<Worker> _signInManager
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Bootstrap HTML5 Admin Template : Master</title>
+    <title>Software House Management</title>
     <!-- Bootstrap Styles-->
     <link href="~/assets/css/bootstrap.css" rel="stylesheet" />
     <!-- FontAwesome Styles-->
@@ -34,15 +37,9 @@
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li>
-                            <a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="#"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            @Html.ActionLink("Logout", "Logout", "Workers", new { })
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -50,34 +47,50 @@
                 <!-- /.dropdown -->
             </ul>
         </nav>
-    <!--/. NAV TOP  -->
+        <!--/. NAV TOP  -->
 
         <nav class="navbar-default navbar-side" role="navigation">
             <div class="sidebar-collapse">
                 <ul class="nav" id="main-menu">
+                    @if (_signInManager.IsSignedIn(User) && User.IsInRole("Client"))
+                    {
+                        <li class="@Html.IsSelected(actions: "AddTask", controllers: "Client")">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Client" asp-action="AddTask"><i class="fa fa-dashboard"></i> Nowe zlecenie</a>
+                        </li>
+                    }
+                    @if ((_signInManager.IsSignedIn(User) && User.IsInRole("Worker"))^(_signInManager.IsSignedIn(User) && User.IsInRole("Admin")))
+                    {
+                        <li class="@Html.IsSelected(actions: "Dashboard", controllers: "Workers")">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Workers" asp-action="Dashboard"><i class="fa fa-dashboard"></i> Dashboard</a>
+                        </li>
+                        <li class="@Html.IsSelected(actions: "LoginTime", controllers: "Workers")">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Workers" asp-action="LoginTime"><i class="fa fa-calendar"></i> Logowanie czasu pracy</a>
+                        </li>
+                    }
+                    @if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        <li class="@Html.IsSelected(actions: "WorkerAdd", controllers: "Workers")">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Workers" asp-action="WorkerAdd"><i class="fa fa-user"></i> Dodawanie pracowników</a>
+                        </li>
+                        <li class="@Html.IsSelected(actions: "Teams", controllers: "Teams")">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Teams"><i class="fa fa-users"></i>Zespoły/zlecenia</a>
+                        </li>
 
-                    <li class="@Html.IsSelected(actions: "Dashboard", controllers: "Workers")">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Workers" asp-action="Dashboard"><i class="fa fa-dashboard"></i> Dashboard</a>
-                    </li>
-                    <li class="@Html.IsSelected(actions: "LoginTime", controllers: "Workers")">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Workers" asp-action="LoginTime"><i class="fa fa-calendar"></i> Logowanie czasu pracy</a>
-                    </li>
-                    <li class="@Html.IsSelected(actions: "WorkerAdd", controllers: "Workers")">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Workers" asp-action="WorkerAdd"><i class="fa fa-user"></i> Dodawanie pracowników</a>
-                    </li>
-                    <li class="@Html.IsSelected(actions: "Teams", controllers: "Teams")">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Teams" asp-action="Teams"><i class="fa fa-users"></i>Zespoły/zlecenia</a>
-                    </li>
-
-                    <li class="@Html.IsSelected(actions: "Positions", controllers: "Positions")">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Positions" asp-action="Positions"><i class="fa fa-edit"></i>Zarządzanie stanowiskami</a>
-                    </li>
-                    <li class="@Html.IsSelected(actions: "Computers", controllers: "Computers")">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Computers" asp-action="Computers"><i class="fa fa-desktop"></i> Zarządzanie komputerami</a>
-                    </li>
-                    <li>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="Workers" asp-action="DownloadCSV"><i class="fa fa-download"></i> CSV za ostatni miesiąc</a>
-                    </li>
+                        <li class="@Html.IsSelected(actions: "Positions", controllers: "Positions")">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Positions" asp-action="Positions"><i class="fa fa-edit"></i>Zarządzanie stanowiskami</a>
+                        </li>
+                        <li class="@Html.IsSelected(actions: "Computers", controllers: "Computers")">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Computers" asp-action="Computers"><i class="fa fa-desktop"></i> Zarządzanie komputerami</a>
+                        </li>
+                    }
+                    @if ((_signInManager.IsSignedIn(User) && User.IsInRole("Worker")) ^ (_signInManager.IsSignedIn(User) && User.IsInRole("Admin")))
+                    {
+                        <li>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Workers" asp-action="DownloadCSV"><i class="fa fa-download"></i> CSV za ostatni miesiąc</a>
+                        </li>
+                    }
+                        
+                    
                 </ul>
 
             </div>
@@ -105,8 +118,9 @@
     <!-- Metis Menu Js -->
     <script src="~/assets/js/jquery.metisMenu.js"></script>
     <!-- Custom Js -->
-<script src="~/assets/js/custom-scripts.js"></script>
+    <script src="~/assets/js/custom-scripts.js"></script>
+    @RenderSection("Scripts", false)
 
 
-</body >
-</html >
+</body>
+</html>

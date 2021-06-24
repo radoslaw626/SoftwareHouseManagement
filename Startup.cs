@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SoftwareHouseManagement.Models;
@@ -32,6 +33,7 @@ namespace SoftwareHouseManagement
             services.AddDbContext<SoftwareHouseDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("SoftwareHouse")));
             services.AddDefaultIdentity<Worker>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<SoftwareHouseDbContext>();
             services.Configure<IdentityOptions>(options =>
             {
@@ -43,6 +45,15 @@ namespace SoftwareHouseManagement
             services.AddTransient<ComputersService>();
             services.AddTransient<TeamsService>();
             services.AddRazorPages();
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "Cookie";
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(720);
+                options.LoginPath = "/Workers/Login";
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+                options.SlidingExpiration = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

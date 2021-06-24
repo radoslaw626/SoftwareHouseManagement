@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -23,20 +24,22 @@ namespace SoftwareHouseManagement.Controllers
 {
     public class WorkersController : Controller
     {
-
+        RoleManager<IdentityRole> _roleManager;
         private readonly WorkersService _workersService;
         private readonly PositionService _positionService;
         private readonly SoftwareHouseDbContext _context;
         private readonly UserManager<Worker> _userManager;
         private readonly SignInManager<Worker> _signInManager;
 
-        public WorkersController( WorkersService workersService, PositionService positionService, SoftwareHouseDbContext context, UserManager<Worker> userManager, SignInManager<Worker> signInManager)
+        public WorkersController( WorkersService workersService, PositionService positionService, SoftwareHouseDbContext context, UserManager<Worker> userManager, SignInManager<Worker> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _workersService = workersService;
             _positionService = positionService;
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
+
         }
 
         [HttpGet]
@@ -69,6 +72,7 @@ namespace SoftwareHouseManagement.Controllers
             if (inserted.Succeeded)
             {
                 await _signInManager.SignInAsync(worker, isPersistent: false);
+                var result1 = await _userManager.AddToRoleAsync(worker, "Worker");
 
                 return RedirectToAction("WorkerAdd");
             }
@@ -89,20 +93,12 @@ namespace SoftwareHouseManagement.Controllers
         [HttpGet]
         public IActionResult Dashboard()
         {
-            var identity = new Worker();
-            try
+            var identity = _userManager.FindByEmailAsync(User.Identity.Name).Result;
+            var RolesForUser =  _userManager.GetRolesAsync(identity).Result;
+            if (RolesForUser[0] == "Client")
             {
-                  identity = _userManager.FindByEmailAsync(User.Identity.Name).Result;
+                return RedirectToAction("AddTask", "Client");
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-
-
-            }
-
-
             if (identity.PositionId != null)
             {
                 ViewBag.Position = _context.Positions.FirstOrDefault(x => x.Id == identity.PositionId);
@@ -166,6 +162,7 @@ namespace SoftwareHouseManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel data)
         {
+
             var worker = new Worker
             {
                 UserName = data.Email,
@@ -176,7 +173,7 @@ namespace SoftwareHouseManagement.Controllers
             if (inserted.Succeeded)
             {
                 await _signInManager.SignInAsync(worker, isPersistent: false);
-
+                var result1 = await _userManager.AddToRoleAsync(worker, "Client");
                 return RedirectToAction("Login", "Workers");
             }
 
@@ -184,6 +181,7 @@ namespace SoftwareHouseManagement.Controllers
             {
                 ModelState.AddModelError("", error.Description);
             }
+
 
             ModelState.AddModelError(string.Empty, "Invalid Login Attempt");
             return View(data);
@@ -205,6 +203,7 @@ namespace SoftwareHouseManagement.Controllers
 
                 if (result.Succeeded)
                 {
+
                     return RedirectToAction("Dashboard", "Workers");
                 }
 

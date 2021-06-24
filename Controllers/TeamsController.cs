@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using SoftwareHouseManagement.Models;
 using SoftwareHouseManagement.Models.Services;
 
@@ -23,6 +24,7 @@ namespace SoftwareHouseManagement.Controllers
             _positionService = positionService;
             _context = context;
         }
+        [Authorize(Roles = "Admin")]
         public IActionResult Teams()
         {
             try
@@ -39,28 +41,28 @@ namespace SoftwareHouseManagement.Controllers
 
             return View();
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult TeamAdd(string name) 
         {
             _teamsService.AddTeam(name);
             return RedirectToAction("Teams");
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult TeamAssignTask(long teamId, long taskId, int hours, int minutes)
         {
             _teamsService.AssignTaskToTeam(teamId,taskId,hours,minutes);
             return RedirectToAction("Teams");
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult TeamAssignWorker(long teamId, string workerId)
         {
             _teamsService.AssignWorkerToTeam(teamId, workerId);
             return RedirectToAction("Teams");
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Members(long teamId)
         {
@@ -68,20 +70,21 @@ namespace SoftwareHouseManagement.Controllers
             var vm = _teamsService.GetTeamsWorkers(teamId);
             return View(vm);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult DeleteTeamContent(long teamId)
         {
             _teamsService.DeleteTeamContent(teamId);
             return RedirectToAction("Teams");
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult DeleteFromTeam(long teamId, string workerId)
         {
             _teamsService.DeleteFromTeam(teamId, workerId);
             return RedirectToAction("Members", new {teamId = teamId});
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Accesses(long teamId)
         {
@@ -89,14 +92,14 @@ namespace SoftwareHouseManagement.Controllers
             var vm=_teamsService.GetTeamsAccesses(teamId);
             return View(vm);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult AddAccessForTeam(long teamId, string accessName)
         {
             _teamsService.AddAccessForTeam(accessName, teamId);
             return RedirectToAction("Accesses", new {teamId = teamId});
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult DeleteAccessFromTeam(long teamId, long accessId)
         {

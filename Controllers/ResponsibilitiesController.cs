@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
 using SoftwareHouseManagement.Models;
@@ -22,7 +23,7 @@ namespace SoftwareHouseManagement.Controllers
             _responsibilitiesService = responsibilitiesService;
             _context = context;
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Responsibilities(int id)
         {
@@ -40,21 +41,21 @@ namespace SoftwareHouseManagement.Controllers
             }
             return View();
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult ResponsibilitiesCreateNew(string Name, long PositionId)
         {
             _responsibilitiesService.CreateResponsibilities(Name);
             return RedirectToAction("Responsibilities", new { id = PositionId });
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult ResponsibilitiesAssign(long responsibilityID, long PositionId)
         {
             _responsibilitiesService.AssignResponsibilities(responsibilityID, PositionId);
             return RedirectToAction("Responsibilities", new { id = PositionId });
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult ResponsibilitiesModify(long id, long positionId)
         {
@@ -71,14 +72,14 @@ namespace SoftwareHouseManagement.Controllers
             }
             return View(responsiblity);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult ResponsibilitiesModify(long id, string name, long positionId)
         {
             _responsibilitiesService.ModifyResponsibility(id, name);
             return RedirectToAction("Responsibilities", new { id = positionId });
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult ResponsibilityDelete(long responsibilityId, long positionId)
         {
