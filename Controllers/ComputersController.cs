@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.EntityFrameworkCore;
 using SoftwareHouseManagement.Models;
@@ -29,9 +32,17 @@ namespace SoftwareHouseManagement.Controllers
         [HttpGet]
         public IActionResult Computers()
         {
-            ViewBag.Workers = _workersService.GetAllWithoutComputer();
-            ViewBag.Computers = _computersService.GetAllWithoutWorker();
-            ViewBag.WorkersWithComputer = _computersService.GetAllWithComputers();
+            try
+            { 
+                ViewBag.Workers = _workersService.GetAllWithoutComputer();
+                ViewBag.Computers = _computersService.GetAllWithoutWorker();
+                ViewBag.WorkersWithComputer = _computersService.GetAllWithComputers();
+
+            }
+            catch (Exception)
+            {
+            }
+
             return View();
         }
 
@@ -50,9 +61,26 @@ namespace SoftwareHouseManagement.Controllers
         }
 
         [HttpGet]
-        public IActionResult ComputerAssignedDelete(long workerId)
+        public IActionResult ComputerAssignedDelete(string workerId)
         {
             _computersService.DeleteAssignedComputers(workerId);
+            return RedirectToAction("Computers");
+        }
+
+        [HttpPost]
+        public IActionResult AddComputersFromCsv(IFormFile file, [FromServices] IHostingEnvironment hostingEnvironment)
+        {
+            #region Upload Csv
+
+            string fileName = $"{hostingEnvironment.WebRootPath}\\files\\{file.FileName}";
+            using (FileStream fileStream = System.IO.File.Create(fileName))
+            {
+                file.CopyTo(fileStream);
+                fileStream.Flush();
+            }
+            #endregion
+
+            _computersService.AddComputersFromCsv(fileName);
             return RedirectToAction("Computers");
         }
     }

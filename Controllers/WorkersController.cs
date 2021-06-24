@@ -85,11 +85,23 @@ namespace SoftwareHouseManagement.Controllers
             }
             return RedirectToAction("WorkerAdd");
         }
-
+        [Authorize]
         [HttpGet]
         public IActionResult Dashboard()
         {
-            var identity = _userManager.FindByEmailAsync(User.Identity.Name).Result;
+            var identity = new Worker();
+            try
+            {
+                  identity = _userManager.FindByEmailAsync(User.Identity.Name).Result;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+
+
+            }
+
 
             if (identity.PositionId != null)
             {
@@ -234,7 +246,14 @@ namespace SoftwareHouseManagement.Controllers
         [HttpGet]
         public IActionResult TeamAccesses(long teamId)
         {
+            try
+            {
             ViewBag.Accesses = _context.Teams.Include(x => x.Accesses).FirstOrDefault(y => y.Id == teamId).Accesses;
+            }
+            catch (Exception )
+            {
+            }
+
             return View();
         }
     }

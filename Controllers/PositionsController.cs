@@ -26,7 +26,14 @@ namespace SoftwareHouseManagement.Controllers
         [HttpGet]
         public IActionResult Positions()
         {
+            try
+            {
             ViewBag.Positions = _positionService.GetAll();
+            }
+            catch (Exception )
+            {
+            }
+
             return View();
         }
 

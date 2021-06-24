@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using SoftwareHouseManagement.Models;
@@ -33,10 +34,10 @@ namespace SoftwareHouseManagement.Models.Services
 
         public IEnumerable<Team> GetAllAssignedTeams()
         {
-            var assignedTeams = _context.Teams.Include(x=>x.Task)
+            var assignedTeams = _context.Teams.Include(x => x.Task)
                 .Where(z => z.TaskId != null).ToList();
             return assignedTeams;
-        } 
+        }
 
         public void AddTeam(string name)
         {
@@ -60,11 +61,23 @@ namespace SoftwareHouseManagement.Models.Services
             _context.SaveChanges();
         }
 
+        public void DeleteTeamContent(long teamId)
+        {
+             var team = _context.Teams.Include(y=>y.Task).FirstOrDefault(x => x.Id == teamId);
+            team.Task.AssignedHours = 0;
+            team.Task = null;
+            team.TaskId = null;
+            team.Workers = null;
+            team.MemberCount = 0;
+            team.Accesses = null;
+            _context.SaveChanges();
+        }
+
         public void AssignWorkerToTeam(long teamId, string workerId)
         {
-            var team = _context.Teams.Include(y=>y.Workers).FirstOrDefault(x => x.Id == teamId);
+            var team = _context.Teams.Include(y => y.Workers).FirstOrDefault(x => x.Id == teamId);
             var worker = _context.Workers.FirstOrDefault(z => z.Id == workerId);
-           team.Workers.Add(worker);
+            team.Workers.Add(worker);
             team.MemberCount++;
             _context.SaveChanges();
         }

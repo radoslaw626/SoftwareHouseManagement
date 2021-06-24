@@ -70,6 +70,12 @@ namespace SoftwareHouseManagement.Controllers
         }
 
         [HttpGet]
+        public IActionResult DeleteTeamContent(long teamId)
+        {
+            _teamsService.DeleteTeamContent(teamId);
+            return RedirectToAction("Teams");
+        }
+        [HttpGet]
         public IActionResult DeleteFromTeam(long teamId, string workerId)
         {
             _teamsService.DeleteFromTeam(teamId, workerId);

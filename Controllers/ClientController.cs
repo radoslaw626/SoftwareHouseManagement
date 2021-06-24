@@ -13,14 +13,12 @@ using System.Globalization;
 
 namespace SoftwareHouseManagement.Controllers
 {
-    public class HomeController : Controller
+    public class ClientController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly SoftwareHouseDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, SoftwareHouseDbContext context)
+        public ClientController(SoftwareHouseDbContext context)
         {
-            _logger = logger;
             _context = context;
         }
 
@@ -36,13 +34,12 @@ namespace SoftwareHouseManagement.Controllers
             var task = new Task()
             {
                 Subject = taskSubject,
-                ClientId =  1
-            }; 
+                ClientId = 1
+            };
             _context.Tasks.Add(task);
             _context.SaveChanges();
             return View();
-        }
-        
 
+        }
     }
 }
