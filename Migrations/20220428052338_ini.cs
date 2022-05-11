@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SoftwareHouseManagement.Migrations
 {
-    public partial class Init : Migration
+    public partial class ini : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,23 +32,6 @@ namespace SoftwareHouseManagement.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Client",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<int>(type: "int", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Company = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Client", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,28 +96,6 @@ namespace SoftwareHouseManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Tasks",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AssignedHours = table.Column<long>(type: "bigint", nullable: false),
-                    WorkedHours = table.Column<long>(type: "bigint", nullable: false),
-                    ClientId = table.Column<long>(type: "bigint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Tasks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Tasks_Client_ClientId",
-                        column: x => x.ClientId,
-                        principalTable: "Client",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetUsers",
                 columns: table => new
                 {
@@ -142,7 +103,6 @@ namespace SoftwareHouseManagement.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ComputerId = table.Column<long>(type: "bigint", nullable: true),
-                    PositionId = table.Column<long>(type: "bigint", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -165,12 +125,6 @@ namespace SoftwareHouseManagement.Migrations
                         name: "FK_AspNetUsers_Computers_ComputerId",
                         column: x => x.ComputerId,
                         principalTable: "Computers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Positions_PositionId",
-                        column: x => x.PositionId,
-                        principalTable: "Positions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -197,27 +151,6 @@ namespace SoftwareHouseManagement.Migrations
                         principalTable: "Responsibilities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Teams",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    MemberCount = table.Column<int>(type: "int", nullable: false),
-                    TaskId = table.Column<long>(type: "bigint", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Teams", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Teams_Tasks_TaskId",
-                        column: x => x.TaskId,
-                        principalTable: "Tasks",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -306,6 +239,52 @@ namespace SoftwareHouseManagement.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PositionWorker",
+                columns: table => new
+                {
+                    PositionsId = table.Column<long>(type: "bigint", nullable: false),
+                    WorkersId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PositionWorker", x => new { x.PositionsId, x.WorkersId });
+                    table.ForeignKey(
+                        name: "FK_PositionWorker_AspNetUsers_WorkersId",
+                        column: x => x.WorkersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PositionWorker_Positions_PositionsId",
+                        column: x => x.PositionsId,
+                        principalTable: "Positions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tasks",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Subject = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AssignedHours = table.Column<long>(type: "bigint", nullable: false),
+                    WorkedHours = table.Column<long>(type: "bigint", nullable: false),
+                    WorkerId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tasks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Tasks_AspNetUsers_WorkerId",
+                        column: x => x.WorkerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "HoursWorked",
                 columns: table => new
                 {
@@ -313,9 +292,8 @@ namespace SoftwareHouseManagement.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Month = table.Column<DateTime>(type: "datetime2", nullable: false),
                     WorkerId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    ProjectId = table.Column<long>(type: "bigint", nullable: false),
-                    Amount = table.Column<long>(type: "bigint", nullable: false),
-                    TaskId = table.Column<long>(type: "bigint", nullable: true)
+                    TaskId = table.Column<long>(type: "bigint", nullable: false),
+                    Amount = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -328,6 +306,27 @@ namespace SoftwareHouseManagement.Migrations
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_HoursWorked_Tasks_TaskId",
+                        column: x => x.TaskId,
+                        principalTable: "Tasks",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Teams",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MemberCount = table.Column<int>(type: "int", nullable: false),
+                    TaskId = table.Column<long>(type: "bigint", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Teams", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Teams_Tasks_TaskId",
                         column: x => x.TaskId,
                         principalTable: "Tasks",
                         principalColumn: "Id",
@@ -427,11 +426,6 @@ namespace SoftwareHouseManagement.Migrations
                 filter: "[ComputerId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_PositionId",
-                table: "AspNetUsers",
-                column: "PositionId");
-
-            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -454,9 +448,14 @@ namespace SoftwareHouseManagement.Migrations
                 column: "ResponsibilitiesId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Tasks_ClientId",
+                name: "IX_PositionWorker_WorkersId",
+                table: "PositionWorker",
+                column: "WorkersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tasks_WorkerId",
                 table: "Tasks",
-                column: "ClientId");
+                column: "WorkerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Teams_TaskId",
@@ -498,6 +497,9 @@ namespace SoftwareHouseManagement.Migrations
                 name: "PositionResponsibilities");
 
             migrationBuilder.DropTable(
+                name: "PositionWorker");
+
+            migrationBuilder.DropTable(
                 name: "TeamWorker");
 
             migrationBuilder.DropTable(
@@ -510,22 +512,19 @@ namespace SoftwareHouseManagement.Migrations
                 name: "Responsibilities");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Positions");
 
             migrationBuilder.DropTable(
                 name: "Teams");
 
             migrationBuilder.DropTable(
-                name: "Computers");
-
-            migrationBuilder.DropTable(
-                name: "Positions");
-
-            migrationBuilder.DropTable(
                 name: "Tasks");
 
             migrationBuilder.DropTable(
-                name: "Client");
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Computers");
         }
     }
 }

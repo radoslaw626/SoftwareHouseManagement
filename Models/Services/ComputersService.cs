@@ -77,45 +77,7 @@ namespace SoftwareHouseManagement.Models.Services
             _context.SaveChanges();
         }
 
-        public void AddComputersFromCsv(string fileName)
-        {
-            List<ComputerCsvViewModel> computersCsv = new List<ComputerCsvViewModel>();
-            #region Read Csv
 
-            var path =  fileName;
-            using(var reader = new StreamReader(path))
-            using (var csv=new CsvReader(reader, CultureInfo.InvariantCulture))
-            {
-                csv.Read();
-                csv.ReadHeader();
-                while (csv.Read())
-                {
-                    var computer = csv.GetRecord<ComputerCsvViewModel>();
-                    computersCsv.Add(computer);
-                }
-            }
-            #endregion
-
-            #region Create Csv
-
-            path = $"{Directory.GetCurrentDirectory()}{@"\wwwroot\FilesTo"}";
-            using (var write = new StreamWriter(path + "\\NewFile.csv"))
-            using (var csv = new CsvWriter(write, CultureInfo.InvariantCulture))
-            {
-                csv.WriteRecords(computersCsv);
-            }
-            #endregion
-
-            foreach (var item in computersCsv)
-            {
-                var computerEntity = new Computer()
-                {
-                    Model = item.Model
-                };
-                _context.Computers.Add(computerEntity);
-                _context.SaveChanges();
-            }
-        }
     }
 }
  

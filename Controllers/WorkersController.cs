@@ -39,10 +39,10 @@ namespace SoftwareHouseManagement.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
-
         }
 
         [HttpGet]
+
         public IActionResult WorkerAdd()
         {
             try
@@ -59,19 +59,20 @@ namespace SoftwareHouseManagement.Controllers
         [HttpPost]
         public async Task<IActionResult> WorkerAdd(Worker data, long positionId)
         {
+            var position = _context.Positions
+                .FirstOrDefault(x => x.Id == positionId);
             var worker = new Worker
             {
                 UserName = data.Email,
                 Email = data.Email,
-                PositionId = positionId,
                 FirstName = data.FirstName,
                 LastName = data.LastName
             };
+            worker.Positions.Add(position);
 
             var inserted = await _userManager.CreateAsync(worker, data.PasswordHash);
             if (inserted.Succeeded)
             {
-                await _signInManager.SignInAsync(worker, isPersistent: false);
                 var result1 = await _userManager.AddToRoleAsync(worker, "Worker");
 
                 return RedirectToAction("WorkerAdd");
@@ -95,13 +96,16 @@ namespace SoftwareHouseManagement.Controllers
         {
             var identity = _userManager.FindByEmailAsync(User.Identity.Name).Result;
             var RolesForUser =  _userManager.GetRolesAsync(identity).Result;
+            var worker = _context.Workers.Include(ha => ha.HoursWorked).FirstOrDefault(hb => hb.Id == identity.Id);
             if (RolesForUser[0] == "Client")
             {
                 return RedirectToAction("AddTask", "Client");
             }
-            if (identity.PositionId != null)
+            if (identity.Positions != null)
             {
-                ViewBag.Position = _context.Positions.FirstOrDefault(x => x.Id == identity.PositionId);
+                var workerPositionsInclude = _context.Workers.Include(a => a.Positions)
+                    .FirstOrDefault(c => c.Id == identity.Id);
+                ViewBag.Positions = workerPositionsInclude.Positions;
             }
             else
             {
@@ -115,10 +119,10 @@ namespace SoftwareHouseManagement.Controllers
             }
             else
             {
-                ViewBag.Computer = new Computer();
+                ViewBag.Computer = new Computer("brak");
             }
 
-            var worker = _context.Workers.Include(ha => ha.HoursWorked).FirstOrDefault(hb => hb.Id == identity.Id);
+
             if (identity.Teams != null)
             {
                 var workerTaskInclude = _context.Workers.Include(a => a.Teams).ThenInclude(b => b.Task).Include(d=>d.Teams).ThenInclude(e=>e.Accesses)
@@ -128,31 +132,6 @@ namespace SoftwareHouseManagement.Controllers
             return View(identity);
 
         }
-
-        public FileContentResult DownloadCSV()
-        {
-            var identity = _userManager.FindByEmailAsync(User.Identity.Name).Result;
-            var worker = _context.Workers.FirstOrDefault(x => x.Id == identity.Id);
-            var position = _context.Positions.FirstOrDefault(y => y.Id == worker.PositionId);
-            var currentDate = DateTime.Now;
-            var first = new DateTime(currentDate.Year, currentDate.Month, 1);
-            var hoursWorkedTicks = _context.HoursWorked.Where(z => z.Month < currentDate & z.Month >=first & z.WorkerId==identity.Id).Sum(za => za.Amount);
-            var timeSpanW = TimeSpan.FromTicks(hoursWorkedTicks);
-            var hoursWorkedString= string.Format($"{(int)timeSpanW.TotalHours}:{timeSpanW:mm}");
-            var hoursInt = hoursWorkedTicks / 36000000000;
-
-            string csv = $"Imię:, {worker.FirstName}\n" +
-                         $"Nazwisko:, {worker.LastName}\n" +
-                         $"Email:, {worker.Email}\n" +
-                         $"Pozycja:, {position.Name}\n" +
-                         $"Stawka:, {position.Wage}, PLN\n" +
-                         $"Przepracowane godziny:, {hoursWorkedString},h\n" +
-                         $"Zarobek:, {hoursInt * position.Wage}, PLN";
-            var data = Encoding.UTF8.GetBytes(csv);
-            var result = Encoding.UTF8.GetPreamble().Concat(data).ToArray();
-            return File(result, "text/csv", "PaySlip.csv");
-        }
-
 
         [HttpGet]
         public IActionResult Register()

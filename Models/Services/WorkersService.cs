@@ -23,6 +23,8 @@ namespace SoftwareHouseManagement.Models.Services
 
         public void AddWorker(string firstName, string lastName, string email, string password, long positionId)
         {
+
+
             var position = _context.Positions
                 .FirstOrDefault(x => x.Id == positionId);
             var worker = new Worker
@@ -31,8 +33,8 @@ namespace SoftwareHouseManagement.Models.Services
                 LastName = lastName,
                 Email = email,
                 //Password = password,
-                Position= position,
             };
+            worker.Positions.Add(position);
             _context.Workers.Add(worker);
             _context.SaveChanges();
         }

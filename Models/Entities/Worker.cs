@@ -16,6 +16,7 @@ namespace SoftwareHouseManagement.Models.Entities
         {
             Teams = new Collection<Team>();
             HoursWorked = new Collection<HoursWorked>();
+            Positions = new Collection<Position>();
         }
         public string FirstName { get; set; }
         
@@ -26,9 +27,7 @@ namespace SoftwareHouseManagement.Models.Entities
         public  virtual Computer Computer { get; set; }
         public virtual IList<Team> Teams { get; set; }
         public virtual IList<HoursWorked> HoursWorked { get; set; }
-        public long? PositionId { get; set; }
-        public virtual Position Position { get; set; }
-
+        public virtual IList<Position> Positions { get; set; }
 
     }
 }

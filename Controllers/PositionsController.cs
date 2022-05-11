@@ -16,12 +16,14 @@ namespace SoftwareHouseManagement.Controllers
     public class PositionsController : Controller
     {
         private readonly PositionService _positionService;
+        private readonly WorkersService _workersService;
         private readonly SoftwareHouseDbContext _context;
 
-        public PositionsController( PositionService positionService, SoftwareHouseDbContext context)
+        public PositionsController( PositionService positionService, SoftwareHouseDbContext context, WorkersService workersService)
         {
             _positionService = positionService;
             _context = context;
+            _workersService = workersService;
         }
         [Authorize(Roles = "Admin")]
         [HttpGet]
@@ -30,6 +32,8 @@ namespace SoftwareHouseManagement.Controllers
             try
             {
             ViewBag.Positions = _positionService.GetAll();
+            ViewBag.Workers = _workersService.GetAll();
+            ViewBag.AssignedWorkers = _positionService.GetAllWithPositions();
             }
             catch (Exception )
             {
@@ -39,9 +43,9 @@ namespace SoftwareHouseManagement.Controllers
         }
         [Authorize(Roles = "Admin")]
         [HttpPost]
-        public IActionResult PositionCreateNew(string Name, decimal Wage)
+        public IActionResult PositionCreateNew(string name, decimal wage)
         {
-            _positionService.CreatePosition(Name, Wage);
+            _positionService.CreatePosition(name, wage);
             return RedirectToAction("Positions");
         }
         [Authorize(Roles = "Admin")]
@@ -65,5 +69,20 @@ namespace SoftwareHouseManagement.Controllers
             _positionService.DeletePosition(id);
             return RedirectToAction("Positions");
         }
+
+        [HttpPost]
+        public ActionResult PositionAssign(string workerId, long positionId)
+        {
+            _positionService.AssignPosition(workerId, positionId);
+            return RedirectToAction("Positions");
+        }
+
+        [HttpGet]
+        public ActionResult PositionDeleteAllAssigned(string workerId)
+        {
+            _positionService.DeleteAllAssignedPositions(workerId);
+            return RedirectToAction("Positions");
+        }
+
     }
 }

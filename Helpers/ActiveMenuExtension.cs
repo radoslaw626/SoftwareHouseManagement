@@ -24,9 +24,6 @@ namespace SoftwareHouseManagement.Helpers
                 cssClass : String.Empty;
         }
 
-
-
-
         private static readonly HtmlContentBuilder _emptyBuilder = new HtmlContentBuilder();
         public static string Titleize(this string text)
         {

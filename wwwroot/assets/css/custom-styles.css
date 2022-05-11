@@ -1,9 +1,3 @@
-/*----------------------------------------------
-Author : www.webthemez.com
-License: Commons Attribution 3.0
-http://creativecommons.org/licenses/by/3.0/
-------------------------------------------------*/
-
 
 /*----------------------------------------------
     COMMON  STYLES    
@@ -13,8 +7,9 @@ body {
     background: #1F1F1F;
 }
 
- #wrapper {
+#wrapper {
     width: 100%;
+    background-color: #3C3943 !important;
 }
 
 #page-wrapper {
@@ -44,7 +39,7 @@ margin-top: 7px;
 margin-bottom: -5px;
 }
 h2 {
-    color: #000;
+    color: lightgray;
 }
 h4 {
     padding-top:10px;
@@ -65,7 +60,7 @@ p {
     z-index: 0; 
 }
 .panel{
-border-radius:0px;
+    border-radius: 0px;
 }
 .navbar-side .nav > li > a > i{
 color: #FFFFFF;
@@ -104,12 +99,15 @@ background-color: #075CB3;
 border-color: #075CB3;
 }
 .breadcrumb {
-padding: 12px 10px 12px 20px;
-margin-bottom: 20px;
-list-style: none;
-
-border-radius: 0;
--webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    background-color: #3C3943 !important;
+    padding: 12px 10px 12px 20px;
+    margin-bottom: 20px;
+    list-style: none;
+    border-radius: 0;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    border-bottom: 1px solid #1F1F1F;
+    color: lightgray !important;
+    box-shadow: 15px 0px 25px -15px #282432 inset;
 }
 .dropdown-menu>li>a {
   display: block;
@@ -183,8 +181,8 @@ color: #FFFFFF;
   border-color: #ECECEC;
 }
 .panel-default > .panel-heading {
-color: #FFF;
-border-color: #FFF;
+color: lightgray;
+border: none;
 font-weight:bold;
 background: #0866C6;
 font-size: 16px;
@@ -192,8 +190,8 @@ text-shadow: none;}
 .panel-heading {
   /* padding: 15px 15px 0px; */
   border-bottom: 1px solid transparent;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 .jumbotron{
 padding:20px;
@@ -452,11 +450,11 @@ line-height: 21px;
 padding-top: 4px;
 }
 .active-menu {
-    background-color: #0866C6 !important;
-    color: #fff !important;
+    background-color: #0866C6;
+    color: #fff;
 }
 .active-menu i{
-color: #fff !important;
+    color: #fff;
 }
 .arrow {
     float: right;
@@ -491,8 +489,7 @@ color: #fff !important;
 	padding:0;
 }
 .sidebar-collapse .nav > li > a {
-	color: #FFFFFF;
-	background:transparent;
+    background:transparent;
 	text-shadow:none;
 }
 .sidebar-collapse > .nav > li > a {
@@ -515,8 +512,9 @@ background: #000000;
 	background: #1F1F1F;
 }
 .top-navbar {
-	background: #0866c6;
-	border-bottom:none;
+    background: #0866c6;
+    border-bottom: none;
+    box-shadow: 275px 0px 25px -15px #282432 inset;
 }
 .top-navbar .nav > li > a > i {
 margin-right: 2px;
@@ -530,8 +528,8 @@ background-color: rgb(43, 46, 51);
 margin: 8px 0;
 }
 .navbar-default {
-border:0px solid black;
-     
+    border: 0px solid black;
+    background-color: #3C3943 !important;
 }
 .navbar-header {
     background: transparent;

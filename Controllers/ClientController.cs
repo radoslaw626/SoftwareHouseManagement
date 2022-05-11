@@ -37,10 +37,11 @@ namespace SoftwareHouseManagement.Controllers
         [HttpPost]
         public IActionResult AddTask(string taskSubject)
         {
+            var identity = _userManager.FindByEmailAsync(User.Identity.Name).Result;
             var task = new Task()
             {
                 Subject = taskSubject,
-                ClientId = 1
+                Worker = identity
             };
             _context.Tasks.Add(task);
             _context.SaveChanges();

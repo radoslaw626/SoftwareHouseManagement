@@ -28,20 +28,35 @@
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                 <div class="font-weight-bold"><b>Przypisany komputer</b></div>
-                                @Model.Computer.Model
+                                @ViewBag.Computer.Model
+
 
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
-                                <div class="font-weight-bold"><b>Pozycja</b></div>
-                                @Model.Position.Name
-                            </div>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-start">
-                            <div class="ms-2 me-auto">
-                                <div class="font-weight-bold"><b>Stawka godzinowa</b></div>
-                                @Model.Position.Wage
+                                <div class="font-weight-bold"><b>Pozycje</b></div>
+                                @{
+                                    var positionsEnum = ViewBag.Positions;
+                                    var countPositions = positionsEnum.Count;
+                                    int i = 0;
+
+                                    foreach (var item in (ViewBag.Positions as IEnumerable<Position>))
+                                    {
+                                        i++;
+                                        if (i < countPositions)
+                                        {
+                                            var position = item.Name + ", ";
+                                            @position
+                                        }
+                                        else
+                                        {
+                                            var position = item.Name;
+                                            @position
+                                        }
+                                    }
+                                }
+
                             </div>
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-start">

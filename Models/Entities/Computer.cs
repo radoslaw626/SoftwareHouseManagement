@@ -8,6 +8,15 @@ namespace SoftwareHouseManagement.Models.Entities
 {
     public class Computer
     {
+        public Computer(string nameModel)
+        {
+            this.Model = nameModel;
+        }
+
+        public Computer()
+        {
+            
+        }
         public long Id { get; set; }
         [Required]
         public string Model { get; set; }

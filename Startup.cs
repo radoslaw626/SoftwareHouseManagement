@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using SoftwareHouseManagement.Models;
 using SoftwareHouseManagement.Models.Entities;
 using SoftwareHouseManagement.Models.Services;
@@ -80,7 +81,7 @@ namespace SoftwareHouseManagement
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Workers}/{action=Dashboard}/{id?}");
+                    pattern: "{controller=Positions}/{action=Positions}/{id?}");
                 endpoints.MapRazorPages();
             });
         }

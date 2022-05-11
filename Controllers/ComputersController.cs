@@ -67,21 +67,5 @@ namespace SoftwareHouseManagement.Controllers
             return RedirectToAction("Computers");
         }
 
-        [HttpPost]
-        public IActionResult AddComputersFromCsv(IFormFile file, [FromServices] IHostingEnvironment hostingEnvironment)
-        {
-            #region Upload Csv
-
-            string fileName = $"{hostingEnvironment.WebRootPath}\\files\\{file.FileName}";
-            using (FileStream fileStream = System.IO.File.Create(fileName))
-            {
-                file.CopyTo(fileStream);
-                fileStream.Flush();
-            }
-            #endregion
-
-            _computersService.AddComputersFromCsv(fileName);
-            return RedirectToAction("Computers");
-        }
     }
 }

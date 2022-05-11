@@ -20,9 +20,8 @@ namespace SoftwareHouseManagement.Models.Entities
         public long AssignedHours { get; set; }
         public long WorkedHours { get; set; }
 
-        public virtual Team Team { get; set; } 
-        public virtual Client Client { get; set; }
-        public long ClientId { get; set; }
+        public virtual Team Team { get; set; }
+        public virtual Worker Worker { get; set; }
         public virtual IList<HoursWorked> HoursWorked { get; set; }
     }
 }

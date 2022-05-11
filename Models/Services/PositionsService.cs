@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using SoftwareHouseManagement.Models;
 using SoftwareHouseManagement.Models.Entities;
 
@@ -52,6 +53,32 @@ namespace SoftwareHouseManagement.Models.Services
             _context.SaveChanges();
         }
 
+        public void AssignPosition(string workerId, long positionId)
+        {
+            var worker = _context.Workers.FirstOrDefault(x => x.Id == workerId);
+            var position = _context.Positions.FirstOrDefault(x=>x.Id==positionId);
+            worker.Positions.Add(position);
+            _context.SaveChanges();
+        }
 
-    }
+        public void DeleteAllAssignedPositions(string workerId)
+        {
+            var worker = _context.Workers.Include(y=>y.Positions).FirstOrDefault(x => x.Id == workerId);
+            worker.Positions.Clear();
+            _context.SaveChanges();
+        }
+
+        public IEnumerable<Worker> GetAllWithPositions()
+        {
+            var workers = _context.Workers.Select(x=>new Worker()
+            {
+                Id = x.Id,
+                FirstName = x.FirstName,
+                LastName = x.LastName,
+                Positions = x.Positions,
+                Email = x.Email
+            }).Where(y=>y.Positions.Count!=0).ToList();
+            return workers;
+        }
+    } 
 }

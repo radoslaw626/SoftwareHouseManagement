@@ -10,8 +10,8 @@ using SoftwareHouseManagement.Models;
 namespace SoftwareHouseManagement.Migrations
 {
     [DbContext(typeof(SoftwareHouseDbContext))]
-    [Migration("20210622120753_Init")]
-    partial class Init
+    [Migration("20220428052338_ini")]
+    partial class ini
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -186,6 +186,21 @@ namespace SoftwareHouseManagement.Migrations
                     b.ToTable("PositionResponsibilities");
                 });
 
+            modelBuilder.Entity("PositionWorker", b =>
+                {
+                    b.Property<long>("PositionsId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("WorkersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("PositionsId", "WorkersId");
+
+                    b.HasIndex("WorkersId");
+
+                    b.ToTable("PositionWorker");
+                });
+
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Access", b =>
                 {
                     b.Property<long>("Id")
@@ -199,33 +214,6 @@ namespace SoftwareHouseManagement.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accesses");
-                });
-
-            modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Client", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Company")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PhoneNumber")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Client");
                 });
 
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Computer", b =>
@@ -257,10 +245,7 @@ namespace SoftwareHouseManagement.Migrations
                     b.Property<DateTime>("Month")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("ProjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("TaskId")
+                    b.Property<long>("TaskId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("WorkerId")
@@ -318,18 +303,18 @@ namespace SoftwareHouseManagement.Migrations
                     b.Property<long>("AssignedHours")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ClientId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Subject")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("WorkedHours")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("WorkerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("WorkerId");
 
                     b.ToTable("Tasks");
                 });
@@ -410,9 +395,6 @@ namespace SoftwareHouseManagement.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<long?>("PositionId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -436,8 +418,6 @@ namespace SoftwareHouseManagement.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("PositionId");
 
                     b.ToTable("AspNetUsers");
                 });
@@ -538,11 +518,28 @@ namespace SoftwareHouseManagement.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PositionWorker", b =>
+                {
+                    b.HasOne("SoftwareHouseManagement.Models.Entities.Position", null)
+                        .WithMany()
+                        .HasForeignKey("PositionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SoftwareHouseManagement.Models.Entities.Worker", null)
+                        .WithMany()
+                        .HasForeignKey("WorkersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.HoursWorked", b =>
                 {
                     b.HasOne("SoftwareHouseManagement.Models.Entities.Task", "Task")
                         .WithMany("HoursWorked")
-                        .HasForeignKey("TaskId");
+                        .HasForeignKey("TaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("SoftwareHouseManagement.Models.Entities.Worker", "Worker")
                         .WithMany("HoursWorked")
@@ -555,13 +552,11 @@ namespace SoftwareHouseManagement.Migrations
 
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Task", b =>
                 {
-                    b.HasOne("SoftwareHouseManagement.Models.Entities.Client", "Client")
-                        .WithMany("Tasks")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("SoftwareHouseManagement.Models.Entities.Worker", "Worker")
+                        .WithMany()
+                        .HasForeignKey("WorkerId");
 
-                    b.Navigation("Client");
+                    b.Navigation("Worker");
                 });
 
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Team", b =>
@@ -579,13 +574,7 @@ namespace SoftwareHouseManagement.Migrations
                         .WithOne("Worker")
                         .HasForeignKey("SoftwareHouseManagement.Models.Entities.Worker", "ComputerId");
 
-                    b.HasOne("SoftwareHouseManagement.Models.Entities.Position", "Position")
-                        .WithMany("Workers")
-                        .HasForeignKey("PositionId");
-
                     b.Navigation("Computer");
-
-                    b.Navigation("Position");
                 });
 
             modelBuilder.Entity("TeamWorker", b =>
@@ -603,19 +592,9 @@ namespace SoftwareHouseManagement.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Client", b =>
-                {
-                    b.Navigation("Tasks");
-                });
-
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Computer", b =>
                 {
                     b.Navigation("Worker");
-                });
-
-            modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Position", b =>
-                {
-                    b.Navigation("Workers");
                 });
 
             modelBuilder.Entity("SoftwareHouseManagement.Models.Entities.Task", b =>

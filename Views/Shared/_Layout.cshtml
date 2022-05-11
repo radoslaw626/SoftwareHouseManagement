@@ -14,6 +14,7 @@
     <link href="~/assets/css/font-awesome.css" rel="stylesheet" />
     <!-- Custom Styles-->
     <link href="~/assets/css/custom-styles.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
     <!-- Google Fonts-->
     <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 </head>
@@ -27,7 +28,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html"><strong>Software House</strong></a>
+                <a class="navbar-brand"><strong>Software House</strong></a>
             </div>
 
             <ul class="nav navbar-top-links navbar-right">
@@ -37,7 +38,6 @@
                         <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li class="divider"></li>
                         <li>
                             @Html.ActionLink("Logout", "Logout", "Workers", new { })
                         </li>
@@ -83,16 +83,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Computers" asp-action="Computers"><i class="fa fa-desktop"></i> Zarządzanie komputerami</a>
                         </li>
                     }
-                    @if ((_signInManager.IsSignedIn(User) && User.IsInRole("Worker")) ^ (_signInManager.IsSignedIn(User) && User.IsInRole("Admin")))
-                    {
-                        <li>
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Workers" asp-action="DownloadCSV"><i class="fa fa-download"></i> CSV za ostatni miesiąc</a>
-                        </li>
-                    }
-                        
-                    
                 </ul>
-
             </div>
             `
         </nav>

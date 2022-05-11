@@ -66,10 +66,10 @@
 
 
             <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-2 col-form-label">Drużyna</label>
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Zespół</label>
                 <div class="col-sm-10">
                     <select class="form-control form-control-sm" aria-label="Default select example" name="teamId">
-                        <option selected>Wybierz drużynę</option>
+                        <option selected>Wybierz zespół</option>
                         @foreach (var item in (ViewBag.NotAssignedTeams as IEnumerable<Team>))
                         {
                             <option value="@item.Id">@item.Name</option>
@@ -110,7 +110,7 @@
 </div>
 <div class="panel panel-default mt-5" style="width:auto">
     <div class="panel-heading">
-        Dodaj pracownika do drużyny
+        Dodaj pracownika do zespołu
     </div>
     <div class="panel-body">
         @using (Html.BeginForm("TeamAssignWorker", "Teams", FormMethod.Post, new { }))
@@ -118,10 +118,10 @@
 
 
             <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-2 col-form-label">Drużyna</label>
+                <label for="inputPassword3" class="col-sm-2 col-form-label">Zespół</label>
                 <div class="col-sm-10">
                     <select class="form-control form-control-sm" aria-label="Default select example" name="teamId">
-                        <option selected>Wybierz drużynę</option>
+                        <option selected>Wybierz zespół</option>
                         @foreach (var item in (ViewBag.AssignedTeams as IEnumerable<Team>))
                         {
                             <option value="@item.Id">@item.Name</option>
@@ -151,15 +151,15 @@
 </div>
 <div class="panel panel-default mt-5" style="width:auto">
     <div class="panel-heading">
-        Dodaj nową drużynę
+        Dodaj nowy zespół
     </div>
     <div class="panel-body">
         @using (Html.BeginForm("TeamAdd", "Teams", FormMethod.Post, new { }))
         {
             <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-2 col-form-label">Drużyna</label>
+                <label for="inputEmail3" class="col-sm-2 col-form-label">Zespół</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="inputEmail3" placeholder="Nazwa drużyny" name="name">
+                    <input type="text" class="form-control" id="inputEmail3" placeholder="Nazwa zespołu" name="name">
                 </div>
             </div>
             <div class="form-group row">

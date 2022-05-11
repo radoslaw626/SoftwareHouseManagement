@@ -31,9 +31,7 @@
                             @Html.DisplayFor(modelItem => item.Wage)
                         </td>
                         <td>
-                            @Html.ActionLink("Obowiązki", "Responsibilities", "Responsibilities", new { id = item.Id }) |
-                            @Html.ActionLink("Modyfikuj", "PositionModify", new { id = item.Id }) |
-                            @Html.ActionLink("Usuń", "PositionDelete", new { id = item.Id })
+                            @Html.ActionLink("Obowiązki", "Responsibilities", "Responsibilities", new { id = item.Id })
                         </td>
                     </tr>
                 }
@@ -41,6 +39,119 @@
         </form>
     </div>
 
+</div>
+
+<div class="panel panel-default mt-5" style="width:auto">
+    <div class="panel-heading">
+        Stanowiska Pracowników
+    </div>
+    <div class="panel-body">
+        <form>
+            <table class="table">
+                <tr>
+                    <th>
+                        Pracownik
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Stanowisko
+                    </th>
+                    <th></th>
+                </tr>
+                @foreach (var item in (ViewBag.AssignedWorkers as IEnumerable<Worker>))
+                {
+                    <tr>
+                        <td>
+                            @item.FirstName @item.LastName
+                        </td>
+                        <td>
+                            @item.Email
+                        </td>
+                        <td>
+                            @{
+                                var positionsEnum = item.Positions;
+                                var countPositions = positionsEnum.Count;
+                                int i = 0;
+
+                                foreach (var pos in (item.Positions as IEnumerable<Position>))
+                                {
+                                    i++;
+                                    if (i < countPositions)
+                                    {
+                                        var position = pos.Name + ", ";
+                                        @position
+                                    }
+                                    else
+                                    {
+                                        var position = pos.Name;
+                                        @position
+                                    }
+                                }
+                            }
+                        </td>
+                        <td>
+                            @Html.ActionLink("Usuń", "PositionDeleteAllAssigned", new { workerId = item.Id })
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </form>
+    </div>
+
+</div>
+
+<div class="panel panel-default mt-5" style="width:auto">
+    <div class="panel-heading">
+        Przypisz stanowisko do pracownika
+    </div>
+    <div class="panel-body">
+        @using (Html.BeginForm("PositionAssign", "Positions", FormMethod.Post, new { }))
+        {
+
+            <fieldset class="form-group">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="inputPassword3" class="col-form-label">Pracownik</label>
+                    </div>
+
+                    <div class="col-sm-10">
+                        <select class="form-control form-control-sm" aria-label="Default select example" name="workerId">
+                            <option selected>Wybierz pracownika</option>
+                            @foreach (var item in (ViewBag.Workers as IEnumerable<Worker>))
+                            {
+                                <option value="@item.Id">@item.Email - @item.FirstName @item.LastName</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="form-group">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label for="inputPassword3" class="col-form-label">Stanowisko</label>
+                    </div>
+
+                    <div class="col-sm-10">
+                        <select class="form-control form-control-sm" aria-label="Default select example" name="positionId">
+                            <option selected>Wybierz stanowisko</option>
+                            @foreach (var item in (ViewBag.Positions as IEnumerable<Position>))
+                            {
+                                <option value="@item.Id">@item.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Przypisz</button>
+                </div>
+            </div>
+        }
+    </div>
 </div>
 
 <div class="panel panel-default mt-5" style="width:auto">
@@ -69,5 +180,7 @@
             </div>
         }
     </div>
-
 </div>
+
+
+
